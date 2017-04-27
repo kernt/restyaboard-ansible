@@ -1,15 +1,17 @@
 ---
 - hosts: local
   vars:
-    username: restya
-    password: hjVl2!rGd22
-    install_dir: /opt/restyaboard
-    install_apps_dir: {{ install_dir }}/client/apps    
+    restya_user: restya
+    restya_pass: hjVl2!rGd22    
+    restya_db: restyaboard
     restya_github: https://github.com/RestyaPlatform/board.git
     restya_apps_github: https://github.com/RestyaPlatform/board-apps.git
-    postgres_db: localhost
+    install_dir: /opt/restyaboard
+    install_apps_dir: {{ install_dir }}/client/apps            
+    postgres_host: localhost
     postgres_port: 5432
-    postgres_db: restyaboard
+    postgres_user: postgres
+    postgres_pass:     
   name: install packages
     become: true
     package:
@@ -46,13 +48,17 @@
     - rebar
     - curl
   postgresql_user:
-    name: {{ username }}
-    password: {{ password }}
+    name: {{ restya_user }}
+    password: {{ restya_pass }}
+    login_host: {{ postgres_host }}
+    login_user: {{ postgres_user }}
+    login_password: {{ postgres_pass }}
+    port: {{ postgres_port }}
     state: present
   postgresql_db:
-    name: {{ postgres_db }}
+    name: {{ restya_db }}
     state: present
-    owner: {{ username }}
+    owner: {{ restya_user}}
   git:
     repo: {{ restya_github }}
     dest: {{ install_dir }}
