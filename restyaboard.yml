@@ -160,25 +160,25 @@
     - name: Setup PHP 
       lineinfile:
         path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "^.*'R_DB_NAME'.*$"
+        regexp: "R_DB_NAME"
         line: "define('R_DB_NAME', '{{ restya_db }}');"
         backup: yes
         create: yes
       lineinfile:
         path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "^.*'R_DB_USER'.*$"
+        regexp: "^R_DB_USER"
         line: "define('R_DB_USER', '{{ postgres_user }}');"
       lineinfile:
         path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "^.*'R_DB_PASSWORD'.*$"
+        regexp: "R_DB_PASSWORD"
         line: "define('R_DB_PASSWORD', '{{ postgres_pass }}');"
       lineinfile:
         path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "^.*'R_DB_HOST'.*$"
+        regexp: "R_DB_HOST"
         line: "define('R_DB_HOST', '{{ postgres_host }}');"
       lineinfile:
         path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "^.*'R_DB_PORT'.*$"
+        regexp: "R_DB_PORT"
         line: "define('R_DB_PORT', '{{ postgres_port }}');" 
       cron:
         backup: yes
