@@ -21,6 +21,10 @@
     smtp_port: []
     timezone: "America/Los_Angeles"
   tasks:
+    - name: ensure latest version of ansible
+      pip:
+        name: ansible
+        state: latest
     - name: install packages
       package:
         name: "{{ item }}"
