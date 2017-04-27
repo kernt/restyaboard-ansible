@@ -112,6 +112,7 @@
         line: "extension=geoip.so"
         backup: yes
         create: yes  
+    - name: Create geoip dir
       file:
         path: /usr/share/GeoIP
         state: directory
@@ -121,14 +122,14 @@
     - name: setup nginx 
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
-        regexp: "server_name.*$"
-        line: "server_name  {{ nginx_domain }} ;"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
         backup: yes
         create: yes
-      lineinfile:
-        path: /etc/nginx/conf.d/restyaboard.conf
-        regexp: "root.*html"
-        line: "root  {{ restya_install_dir }}" 
+      with_items:
+        - { regexp: "root.*html", line: "root  {{ restya_install_dir }}" }
+        - { regexp: "server_name.*$", line: "server_name  {{ nginx_domain }} ;" }
+    - name: Move restya to install dir
       copy:
         src: "{{ download_dir }}/"
         dest: "{{ restya_install_dir }}"
