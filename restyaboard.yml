@@ -82,12 +82,12 @@
       git:
         repo: "{{ restya_github }}"
         dest: "{{ download_dir }}"
-	  become: true
+      become: true
     - name: Grab restya git apps
       git:
         repo: "{{ restya_apps_github }}"
         dest: "{{ download_apps_dir }}"
-	  become: true
+      become: true
     - name: setup php timezone
       lineinfile:
         path: /etc/php/7.0/fpm/php.ini
@@ -95,16 +95,16 @@
         line: "date.timezone = {{ timezone }}"
         backup: yes
         create: yes 
-	  become: true
-	- name: change auth params in php
+      become: true
+    - name: change auth params in php
       lineinfile:
         path: "{{ postgres_conf }}"
         regexp: "(peer|ident)"
         line: "trust"
         backup: yes
         create: yes
-	  become: true
-	- name: enable geopip phpext
+      become: true
+    - name: enable geopip phpext
       lineinfile:
         path: /etc/php.ini
         regexp: "extension=geoip.so"
@@ -141,12 +141,12 @@
         path: "{{ item }}" 
         mode: 0775
         state: directory
-	  with_items:
-	    - "{{ restya_install_dir }}/media"
+      with_items:
+        - "{{ restya_install_dir }}/media"
         - "{{ restya_install_dir }}/client/img"
         - "{{ restya_install_dir }}/tmp/cache"
       become: true
-    - name: Setup restya shell file perms	  
+    - name: Setup restya shell file perms      
       file:
         path: "{{ restya_install_dir }}/server/php/*.sh"
         mode: 0755
@@ -169,43 +169,43 @@
         line: "{{ item.line }}"
         backup: yes
         create: yes
-	  with_items:
-	    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_NAME'.*$", line: "define('R_DB_NAME', '{{ restya_db }}');" }
-	    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ postgres_user }}');" }
-	    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ postgres_pass }}');" }
-	    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ postgres_host }}');" }
-	    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ postgres_port }}');" }
-	  become: yes
-	- name: setup email notifications in cron
+      with_items:
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_NAME'.*$", line: "define('R_DB_NAME', '{{ restya_db }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ postgres_user }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ postgres_pass }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ postgres_host }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ postgres_port }}');" }
+      become: yes
+    - name: setup email notifications in cron
       cron:
         backup: yes
         minute:  "{{ item.minute }}" 
-	        job:  "{{ item.job }}"
-	  with_items:	
-		{ job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh", minute: "*/5" }
-		{ minute: "*/55", job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh" }
-		{ minute: "*/30", job: "{{ restya_install_dir }}/server/php/shell/imap.sh" }
-		{ minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/webhook.sh" }
-		{ minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/card_due_notification.sh" }
-	- name: setup php to use smtp
+            job:  "{{ item.job }}"
+      with_items:    
+        { job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh", minute: "*/5" }
+        { minute: "*/55", job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh" }
+        { minute: "*/30", job: "{{ restya_install_dir }}/server/php/shell/imap.sh" }
+        { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/webhook.sh" }
+        { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/card_due_notification.sh" }
+    - name: setup php to use smtp
       lineinfile:
         path: /etc/php.ini
         regexp: "{{ item.regexp }}
-		line: "{{ item.line }} 
-	  with_items:
-	    - { regexp: "1021 i auth_username = {{ smtp_user }}", line: "1021 i auth_username = {{ smtp_user }}" }
-        - {	regexp: "1022 i auth_password = {{ smtp_pass }}", line: "1022 i auth_password = {{ smtp_pass }}" }
-		- { regexp: "SMTP = .*$", line: "SMTP = {{ smtp_host }}" }
-		- { regexp: "smtp_port = .*$", line: "smtp_port = {{ smtp_port }}" }
+        line: "{{ item.line }} 
+      with_items:
+        - { regexp: "1021 i auth_username = {{ smtp_user }}", line: "1021 i auth_username = {{ smtp_user }}" }
+        - {    regexp: "1022 i auth_password = {{ smtp_pass }}", line: "1022 i auth_password = {{ smtp_pass }}" }
+        - { regexp: "SMTP = .*$", line: "SMTP = {{ smtp_host }}" }
+        - { regexp: "smtp_port = .*$", line: "smtp_port = {{ smtp_port }}" }
       become: true
     - name: Restart services
       service:
         name: {{ item }} 
         state: restarted
-	  with_items:
-	    - "postgresql"
-		- "cron"
-		- "nginx"
-		- "php7.0-fpm"
-		- "postfix"
+      with_items:
+        - "postgresql"
+        - "cron"
+        - "nginx"
+        - "php7.0-fpm"
+        - "postfix"
       become: true
