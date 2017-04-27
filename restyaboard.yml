@@ -159,26 +159,26 @@
       command: psql -d {{ restya_db }} -f "{{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U {{ postgres_user }}"
     - name: Setup PHP 
       lineinfile:
-        path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "R_DB_NAME"
+        path: "{{ restya_install_dir }}/server/php/config.inc.php"
+        regexp: "^.*'R_DB_NAME'.*$"
         line: "define('R_DB_NAME', '{{ restya_db }}');"
         backup: yes
         create: yes
       lineinfile:
-        path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "^R_DB_USER"
+        path: "{{ restya_install_dir }}/server/php/config.inc.php"
+        regexp: "^.*'R_DB_USER'.*$"
         line: "define('R_DB_USER', '{{ postgres_user }}');"
       lineinfile:
-        path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "R_DB_PASSWORD"
+        path: "{{ restya_install_dir }}/server/php/config.inc.php"
+        regexp: "^.*'R_DB_PASSWORD'.*$"
         line: "define('R_DB_PASSWORD', '{{ postgres_pass }}');"
       lineinfile:
-        path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "R_DB_HOST"
+        path: "{{ restya_install_dir }}/server/php/config.inc.php"
+        regexp: "^.*'R_DB_HOST'.*$"
         line: "define('R_DB_HOST', '{{ postgres_host }}');"
       lineinfile:
-        path: "{{ restya_install_dir }}/server/php/config.inc.php
-        regexp: "R_DB_PORT"
+        path: "{{ restya_install_dir }}/server/php/config.inc.php"
+        regexp: "^.*'R_DB_PORT'.*$"
         line: "define('R_DB_PORT', '{{ postgres_port }}');" 
       cron:
         backup: yes
