@@ -180,7 +180,7 @@
       cron:
         backup: yes
         minute:  "{{ item.minute }}" 
-            job:  "{{ item.job }}"
+        job:  "{{ item.job }}"
       with_items:    
         { job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh", minute: "*/5" }
         { minute: "*/55", job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh" }
