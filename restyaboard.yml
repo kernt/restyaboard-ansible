@@ -92,7 +92,7 @@
       lineinfile:
         path: /etc/php/7.0/fpm/php.ini
         regexp: ";date.timezone"
-        line: "date.timezone = {{ timezone }}"
+        line: "date.timezone = "{{ timezone }}"
         backup: yes
         create: yes 
       become: true
@@ -121,20 +121,20 @@
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
         regexp: "server_name.*$"
-        line: "server_name {{ nginx_domain }} ;"
+        line: "server_name "{{ nginx_domain }} ;"
         backup: yes
         create: yes
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
         regexp: "root.*html"
-        line: "root {{ restya_install_dir }}" 
+        line: "root "{{ restya_install_dir }}" 
       copy:
         src: "{{ download_dir }}/"
         dest: "{{ restya_install_dir }}"
         directory_mode: yes
       become: true
     - name: Setup Postfix
-      shell: 'echo "postfix postfix/mailname string {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections'
+      shell: 'echo "postfix postfix/mailname string "{{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections'
       become: true
     - name: Setup restya dir Perms
       file:
@@ -161,10 +161,10 @@
         port: "{{ postgres_port }}"
         name: plpgsql
     - name: Import Postgres db
-      command: psql -d {{ restya_db }} -f "{{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U {{ postgres_user }}"
+      command: psql -d "{{ restya_db }} -f "{{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U "{{ postgres_user }}"
     - name: Setup PHP 
       lineinfile:
-        path: {{ item.path }} 
+        path: "{{ item.path }}"
         regexp: "{{ item.reg }}" 
         line: "{{ item.line }}"
         backup: yes
@@ -190,17 +190,17 @@
     - name: setup php to use smtp
       lineinfile:
         path: /etc/php.ini
-        regexp: "{{ item.regexp }}
-        line: "{{ item.line }} 
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }} "
       with_items:
-        - { regexp: "1021 i auth_username = {{ smtp_user }}", line: "1021 i auth_username = {{ smtp_user }}" }
-        - {    regexp: "1022 i auth_password = {{ smtp_pass }}", line: "1022 i auth_password = {{ smtp_pass }}" }
-        - { regexp: "SMTP = .*$", line: "SMTP = {{ smtp_host }}" }
-        - { regexp: "smtp_port = .*$", line: "smtp_port = {{ smtp_port }}" }
+        - { regexp: "1021 i auth_username = "{{ smtp_user }}", line: "1021 i auth_username = "{{ smtp_user }}" }
+        - {    regexp: "1022 i auth_password = "{{ smtp_pass }}", line: "1022 i auth_password = "{{ smtp_pass }}" }
+        - { regexp: "SMTP = .*$", line: "SMTP = "{{ smtp_host }}" }
+        - { regexp: "smtp_port = .*$", line: "smtp_port = "{{ smtp_port }}" }
       become: true
     - name: Restart services
       service:
-        name: {{ item }} 
+        name: "{{ item }} "
         state: restarted
       with_items:
         - "postgresql"
