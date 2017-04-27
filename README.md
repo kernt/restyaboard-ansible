@@ -6,11 +6,11 @@ An ansible playbook to replace the bash install script with more flexibility giv
 Requirements
 ------------
 
-Latest version of ansible.
+Latest version of ansible. This was only tested on Ubuntu 16.04 LTS, should work on any debian or rhel variant, but not guarenteed.
 
 Role Variables
 --------------
-restya_user - restya database user name
+    restya_user - restya database user name
 
     restya_pass - restya database user password
     
