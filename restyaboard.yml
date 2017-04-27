@@ -121,20 +121,20 @@
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
         regexp: "server_name.*$"
-        line: "server_name "{{ nginx_domain }} ;"
+        line: "server_name  {{ nginx_domain }} ;"
         backup: yes
         create: yes
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
         regexp: "root.*html"
-        line: "root "{{ restya_install_dir }}" 
+        line: "root  {{ restya_install_dir }}" 
       copy:
         src: "{{ download_dir }}/"
         dest: "{{ restya_install_dir }}"
         directory_mode: yes
       become: true
     - name: Setup Postfix
-      shell: 'echo "postfix postfix/mailname string "{{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections'
+      shell: 'echo "postfix postfix/mailname string  {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections'
       become: true
     - name: Setup restya dir Perms
       file:
@@ -161,7 +161,7 @@
         port: "{{ postgres_port }}"
         name: plpgsql
     - name: Import Postgres db
-      command: psql -d "{{ restya_db }} -f "{{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U "{{ postgres_user }}"
+      command: psql -d  {{ restya_db }} -f  {{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U  {{ postgres_user }}"
     - name: Setup PHP 
       lineinfile:
         path: "{{ item.path }}"
