@@ -65,19 +65,18 @@
         - python-pip
         - expat
       become: true
-    - name: create db  
-      postgresql_user:
-        name: "{{ restya_user }}"
-        password: "{{ restya_pass }}"
-        login_host: "{{ postgres_host }}"
-        login_user: "{{ postgres_user }}"
-        login_password: "{{ postgres_pass }}"
-        port: "{{ postgres_port }}"
-        state: present
-      postgresql_db:
-        name: "{{ restya_db }}"
-        state: present
-        owner: "{{ restya_user}}"
+    - postgresql_user:
+      name: "{{ restya_user }}"
+      password: "{{ restya_pass }}"
+      login_host: "{{ postgres_host }}"
+      login_user: "{{ postgres_user }}"
+      login_password: "{{ postgres_pass }}"
+      port: "{{ postgres_port }}"
+      state: present
+    - postgresql_db:
+      name: "{{ restya_db }}"
+      state: present
+      owner: "{{ restya_user}}"
     - name: Grab git projects 
       git:
         repo: "{{ restya_github }}"
