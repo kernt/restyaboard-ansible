@@ -142,14 +142,22 @@
       shell: echo "postfix postfix/mailname string  {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
       become: true
     - name: Setup restya dir Perms
-      command: "chmod 755 {{ item }}" 
+      file: 
+        path: "{{ item }}" 
+        owner: www-data
+        group: www-data
+        mode: 0775
+        state: directory
       with_items:
         - "{{ restya_install_dir }}/media"
         - "{{ restya_install_dir }}/client/img"
         - "{{ restya_install_dir }}/tmp/cache"
       become: true
     - name: Setup restya shell file perms      
-      command: "chmod 755 {{ restya_install_dir }}/server/php/*.sh"
+      file: 
+        path: "{{ restya_install_dir }}/server/php/*.sh"
+        mode: 0755
+        state: file
       become: true
     - name: create restya db
       postgresql_ext:
