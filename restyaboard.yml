@@ -74,7 +74,7 @@
         name: "{{ restya_user }}"
         password: "{{ restya_pass }}"
         state: present
-    - namne: create the db itself    
+    - name: create the db itself    
       postgresql_db:
         name: "{{ restya_db }}"
         state: present
