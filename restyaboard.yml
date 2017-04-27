@@ -64,6 +64,12 @@
         - libnl-genl-3-dev
         - python-pip
         - expat
+        - python-pip 
+        - python-dev 
+        - libssl-dev 
+        - build-essential 
+        - libtool 
+        - autoconf
       become: true
     - name: ensure latest version of ansible pip psycopg2
       pip:
@@ -133,7 +139,7 @@
     - name: Setup restya dir Perms
       file:
         path: "{{ item }}" 
-        mode: 0775
+        mode: "0775"
         state: directory
       with_items:
         - "{{ restya_install_dir }}/media"
@@ -143,7 +149,7 @@
     - name: Setup restya shell file perms      
       file:
         path: "{{ restya_install_dir }}/server/php/*.sh"
-        mode: 0755
+        mode: "0755"
         state: file
       become: true
     - name: create restya db
