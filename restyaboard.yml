@@ -6,53 +6,64 @@
     restya_db: restyaboard
     restya_github: https://github.com/RestyaPlatform/board.git
     restya_apps_github: https://github.com/RestyaPlatform/board-apps.git
-    install_dir: /opt/restyaboard
-    install_apps_dir: {{ install_dir }}/client/apps            
+    restya_install_dir: /usr/share/nginx/html/restyaboard
+    download_dir: /opt/restyaboard
+    download_apps_dir: {{ download_dir }}/client/apps            
     postgres_host: localhost
     postgres_port: 5432
     postgres_user: postgres
-    postgres_pass:     
+    postgres_pass:  
+    postgres_conf: /etc/postgresql/9.5/main/pg_hba.conf
+    nginx_domain: my.exampledomain.com
+    smtp_user:
+    smtp_pass:
+    smtp_host:
+    smtp_port:
+    timezone: America/Los_Angeles    
   name: install packages
     become: true
     package:
       name: "{{ item }}"
       state: present
-  with_items:
-    - postgresql
-    - unzip
-    - nginx-full
-    - jq
-    - python-software-properties
-    - libjpeg8
-    - php
-    - php7.0-fpm
-    - php7.0-cli
-    - libpq5
-    - php7.0-pgsql
-    - php7.0-mbstring
-    - php7.0-ldap
-    - gcc
-    - imagemagick
-    - php7.0-imap
-    - php7.0-xml
-    - wget
-    - ca-certificates
-    - php7.0-geoip
-    - php7.0-dev
-    - libgeoip-dev
-    - geoip
-    - autotools-dev
-    - automake
-    - erlang
-    - libyaml-dev
-    - rebar
-    - curl
-    - debian-keyring 
-    - debian-archive-keyring
-    - libnl-3-200
-    - libnl-3-dev
-    - libnl-genl-3-200
-    - libnl-genl-3-dev
+    with_items:
+      - postgresql
+      - unzip
+      - nginx-full
+      - jq
+      - python-software-properties
+      - libjpeg8
+      - php
+      - postfix
+      - php7.0-fpm
+      - php7.0-cli
+      - libpq5
+      - php7.0-pgsql
+      - php7.0-mbstring
+      - php7.0-ldap
+      - gcc
+      - imagemagick
+      - php7.0-imap
+      - php7.0-xml
+      - wget
+      - ca-certificates
+      - php7.0-geoip
+      - php7.0-dev
+      - libgeoip-dev
+      - geoip-bin
+      - autotools-dev
+      - automake
+      - erlang
+      - libyaml-dev
+      - rebar
+      - curl
+      - debian-keyring 
+      - debian-archive-keyring
+      - libnl-3-200
+      - libnl-3-dev
+      - libnl-genl-3-200
+      - libnl-genl-3-dev
+      - python-pip
+      - expat    
   postgresql_user:
     name: {{ restya_user }}
     password: {{ restya_pass }}
@@ -67,7 +78,141 @@
     owner: {{ restya_user}}
   git:
     repo: {{ restya_github }}
-    dest: {{ install_dir }}
+    dest: {{ download_dir }}
   git:
     repo: {{ restya_apps_github }}
-    dest: {{ install_dir_apps }}
+    dest: {{ download_apps_dir }}
+  lineinfile:
+    path: /etc/php/7.0/fpm/php.ini
+    regexp: ";date.timezone"
+    line: "date.timezone = {{ timezone }}"
+    backup: yes
+    create: yes
+  lineinfile:
+    path: {{ postgres_conf }}
+    regexp: "(peer|ident)"
+    line: "trust"
+    backup: yes
+    create: yes
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "extension=geoip.so"
+    line: "extension=geoip.so"
+    backup: yes
+    create: yes    
+  file:
+    path: /usr/share/GeoIP
+    state: directory
+  name: get geo data
+    command: get_geoip_data
+  lineinfile:
+    path: /etc/nginx/conf.d/restyaboard.conf
+    regexp: "server_name.*$"
+    line: "server_name {{ nginx_domain }} ;"
+    backup: yes
+    create: yes
+  lineinfile:
+    path: /etc/nginx/conf.d/restyaboard.conf
+    regexp: "root.*html"
+    line: "root {{ restya_install_dir }}"  
+  copy:
+    src: {{ download_dir }}/
+    dest: {{ restya_install_dir }}
+    directory_mode: yes
+  name: Setup Postfix
+    shell: echo "postfix postfix/mailname string {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
+  name: Setup File Perms
+    file:
+      path: "{{ restya_install_dir }}/media"
+      mode: "g=ow"
+      state: directory
+    file:
+      path: "{{ restya_install_dir }}/client/img"
+      mode: "g=ow"
+      state: directory
+    file:
+      path: "{{ restya_install_dir }}/tmp/cache"
+      mode: "g=ow"
+      state: directory
+    file:
+      path: "{{ restya_install_dir }}/server/php/*.sh"
+      mode: 0755
+      state: file
+  postgresql_ext:
+    db: {{ restya_db }}
+    login_host: {{ postgres_host }}
+    login_user: {{ postgres_user }}
+    login_pass: {{ postgres_pass }}
+    port: {{ postgres_port }}
+    name: plpgsql
+  name: Import Postgres db
+    command: psql -d {{ restya_db }} -f "{{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U {{ postgres_user }}
+  lineinfile:
+    path: {{ restya_install_dir }}/server/php/config.inc.php
+    regexp: "^.*'R_DB_NAME'.*$"
+    line: "define('R_DB_NAME', '{{ restya_db }}');"
+    backup: yes
+    create: yes
+  lineinfile:
+    path: {{ restya_install_dir }}/server/php/config.inc.php
+    regexp: "^.*'R_DB_USER'.*$"
+    line: "define('R_DB_USER', '{{ postgres_user }}');"
+  lineinfile:
+    path: {{ restya_install_dir }}/server/php/config.inc.php
+    regexp: "^.*'R_DB_PASSWORD'.*$"
+    line: "define('R_DB_PASSWORD', '{{ postgres_pass }}');"
+  lineinfile:
+    path: {{ restya_install_dir }}/server/php/config.inc.php
+    regexp: "^.*'R_DB_HOST'.*$"
+    line: "define('R_DB_HOST', '{{ postgres_host }}');"
+  lineinfile:
+    path: {{ restya_install_dir }}/server/php/config.inc.php
+    regexp: "^.*'R_DB_PORT'.*$"
+    line: "define('R_DB_PORT', '{{ postgres_port }}');"  
+  cron:
+    backup: yes
+    minute: "*/5"
+    job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh"
+  cron:
+    backup: yes
+    hour: "*/1"
+    job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh"  
+  cron:
+    minute: "*/30"
+    job: "{{ restya_install_dir }}/server/php/shell/imap.sh"
+  cron:
+    minute: "*/5"
+    job: "{{ restya_install_dir }}/server/php/shell/webhook.sh"
+  cron:
+    minute: "*/5"
+    job: "{{ restya_install_dir }}/server/php/shell/card_due_notification.sh"
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "1021 i auth_username = {{ smtp_user }}"    
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "1022 i auth_password = {{ smtp_pass }}"
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "SMTP = .*$"
+    line: "SMTP = {{ smtp_host }}"
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "smtp_port = .*$"
+    line: "smtp_port = {{ smtp_port }}"
+  service:
+    name: postgresql
+    state: restarted
+  service:
+    name: cron
+    state: restarted
+  service:
+    name: php7.0-fpm
+    state: restarted
+  service:
+    name: nginx
+    state: restarted
+  service:
+    name: postfix
+    state: restarted
+    
