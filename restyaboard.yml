@@ -128,10 +128,16 @@
         - { regexp: "root.*html", line: "root  {{ restya_install_dir }}" }
         - { regexp: "server_name.*$", line: "server_name  {{ nginx_domain }} ;" }
     - name: Create restya install dir
-      command: "mkdir -p {{ restya_install_dir }}"
-      become: trueq
+      file:
+        mode: 0775
+        state: directory
+        path: "{{ download_dir }}"
+      become: true
     - name: Move restya to install dir
-      command: "mv -f {{ download_dir }}/* {{ restya_install_dir }} "
+      - synchronize:
+        mode: pull
+        src: "{{ download_dir }}/"
+        dest: "/{{ restya_install_dir }}/"
       become: true
     - name: Setup Postfix
       shell: echo "postfix postfix/mailname string  {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
