@@ -182,11 +182,11 @@
         minute:  "{{ item.minute }}" 
         job:  "{{ item.job }}"
       with_items:    
-        { job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh", minute: "*/5" }
-        { minute: "*/55", job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh" }
-        { minute: "*/30", job: "{{ restya_install_dir }}/server/php/shell/imap.sh" }
-        { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/webhook.sh" }
-        { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/card_due_notification.sh" }
+        - { job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh", minute: "*/5" }
+        - { minute: "*/55", job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh" }
+        - { minute: "*/30", job: "{{ restya_install_dir }}/server/php/shell/imap.sh" }
+        - { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/webhook.sh" }
+        - { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/card_due_notification.sh" }
     - name: setup php to use smtp
       lineinfile:
         path: /etc/php.ini
@@ -194,7 +194,7 @@
         line: "{{ item.line }} "
       with_items:
         - { regexp: "1021 i auth_username = {{ smtp_user }}", line: "1021 i auth_username = {{ smtp_user }}" }
-        - {    regexp: "1022 i auth_password = {{ smtp_pass }}", line: "1022 i auth_password = {{ smtp_pass }}" }
+        - { regexp: "1022 i auth_password = {{ smtp_pass }}", line: "1022 i auth_password = {{ smtp_pass }}" }
         - { regexp: "SMTP = .*$", line: "SMTP = {{ smtp_host }}" }
         - { regexp: "smtp_port = .*$", line: "smtp_port = {{ smtp_port }}" }
       become: true
