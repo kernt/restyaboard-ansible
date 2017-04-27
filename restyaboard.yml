@@ -23,8 +23,12 @@
   tasks:
     - name: ensure latest version of ansible
       pip:
-        name: ansible
+        name: "{{ item }}"
         state: latest
+      with_items:
+        - ansible
+        - pip
+        - psycopg2
     - name: install packages
       package:
         name: "{{ item }}"
