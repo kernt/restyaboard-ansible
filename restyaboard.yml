@@ -134,7 +134,7 @@
         directory_mode: yes
       become: true
     - name: Setup Postfix
-      shell: 'echo "postfix postfix/mailname string  {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections'
+      shell: echo "postfix postfix/mailname string  {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
       become: true
     - name: Setup restya dir Perms
       file:
