@@ -72,8 +72,6 @@
     - postgresql_user:
       name: "{{ restya_user }}"
       password: "{{ restya_pass }}"
-      login_host: "{{ postgres_host }}"      
-      port: "{{ postgres_port }}"
       state: present
     - postgresql_db:
       name: "{{ restya_db }}"
