@@ -8,7 +8,7 @@
     restya_apps_github: https://github.com/RestyaPlatform/board-apps.git
     restya_install_dir: /usr/share/nginx/html/restyaboard
     download_dir: /opt/restyaboard
-    download_apps_dir: {{ download_dir }}/client/apps            
+    download_apps_dir: "{{ download_dir }}/client/apps"            
     postgres_host: localhost
     postgres_port: 5432
     postgres_user: postgres
@@ -65,23 +65,23 @@
       - python-pip
       - expat    
   postgresql_user:
-    name: {{ restya_user }}
-    password: {{ restya_pass }}
-    login_host: {{ postgres_host }}
-    login_user: {{ postgres_user }}
-    login_password: {{ postgres_pass }}
-    port: {{ postgres_port }}
+    name: "{{ restya_user }}"
+    password: "{{ restya_pass }}"
+    login_host: "{{ postgres_host }}"
+    login_user: "{{ postgres_user }}"
+    login_password: "{{ postgres_pass }}"
+    port: "{{ postgres_port }}"
     state: present
   postgresql_db:
-    name: {{ restya_db }}
+    name: "{{ restya_db }}"
     state: present
-    owner: {{ restya_user}}
+    owner: "{{ restya_user}}"
   git:
-    repo: {{ restya_github }}
-    dest: {{ download_dir }}
+    repo: "{{ restya_github }}"
+    dest: "{{ download_dir }}"
   git:
-    repo: {{ restya_apps_github }}
-    dest: {{ download_apps_dir }}
+    repo: "{{ restya_apps_github }}"
+    dest: "{{ download_apps_dir }}"
   lineinfile:
     path: /etc/php/7.0/fpm/php.ini
     regexp: ";date.timezone"
@@ -89,7 +89,7 @@
     backup: yes
     create: yes
   lineinfile:
-    path: {{ postgres_conf }}
+    path: "{{ postgres_conf }}"
     regexp: "(peer|ident)"
     line: "trust"
     backup: yes
@@ -116,8 +116,8 @@
     regexp: "root.*html"
     line: "root {{ restya_install_dir }}"  
   copy:
-    src: {{ download_dir }}/
-    dest: {{ restya_install_dir }}
+    src: "{{ download_dir }}/"
+    dest: "{{ restya_install_dir }}"
     directory_mode: yes
   name: Setup Postfix
     shell: echo "postfix postfix/mailname string {{ nginx_domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
@@ -139,34 +139,34 @@
       mode: 0755
       state: file
   postgresql_ext:
-    db: {{ restya_db }}
-    login_host: {{ postgres_host }}
-    login_user: {{ postgres_user }}
-    login_pass: {{ postgres_pass }}
-    port: {{ postgres_port }}
+    db: "{{ restya_db }}"
+    login_host: "{{ postgres_host }}"
+    login_user: "{{ postgres_user }}"
+    login_pass: "{{ postgres_pass }}"
+    port: "{{ postgres_port }}"
     name: plpgsql
   name: Import Postgres db
-    command: psql -d {{ restya_db }} -f "{{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U {{ postgres_user }}
+    command: psql -d {{ restya_db }} -f "{{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U {{ postgres_user }}"
   lineinfile:
-    path: {{ restya_install_dir }}/server/php/config.inc.php
+    path: "{{ restya_install_dir }}/server/php/config.inc.php
     regexp: "^.*'R_DB_NAME'.*$"
     line: "define('R_DB_NAME', '{{ restya_db }}');"
     backup: yes
     create: yes
   lineinfile:
-    path: {{ restya_install_dir }}/server/php/config.inc.php
+    path: "{{ restya_install_dir }}/server/php/config.inc.php
     regexp: "^.*'R_DB_USER'.*$"
     line: "define('R_DB_USER', '{{ postgres_user }}');"
   lineinfile:
-    path: {{ restya_install_dir }}/server/php/config.inc.php
+    path: "{{ restya_install_dir }}/server/php/config.inc.php
     regexp: "^.*'R_DB_PASSWORD'.*$"
     line: "define('R_DB_PASSWORD', '{{ postgres_pass }}');"
   lineinfile:
-    path: {{ restya_install_dir }}/server/php/config.inc.php
+    path: "{{ restya_install_dir }}/server/php/config.inc.php
     regexp: "^.*'R_DB_HOST'.*$"
     line: "define('R_DB_HOST', '{{ postgres_host }}');"
   lineinfile:
-    path: {{ restya_install_dir }}/server/php/config.inc.php
+    path: "{{ restya_install_dir }}/server/php/config.inc.php
     regexp: "^.*'R_DB_PORT'.*$"
     line: "define('R_DB_PORT', '{{ postgres_port }}');"  
   cron:
