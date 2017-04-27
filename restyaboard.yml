@@ -73,16 +73,6 @@
         - python-pip
         - expat
       become: true
-    - name: creat the db user
-      postgresql_user:
-        name: "{{ restya_user }}"
-        password: "{{ restya_pass }}"
-        state: present
-    - name: create the db itself    
-      postgresql_db:
-        name: "{{ restya_db }}"
-        state: present
-        owner: "{{ restya_user}}"
     - name: Grab git projects 
       git:
         repo: "{{ restya_github }}"
@@ -101,7 +91,7 @@
         backup: yes
         create: yes 
       become: true
-    - name: change auth params in php
+    - name: change auth params in postgres
       lineinfile:
         path: "{{ postgres_conf }}"
         regexp: "(peer|ident)"
@@ -166,6 +156,16 @@
         login_pass: "{{ postgres_pass }}"
         port: "{{ postgres_port }}"
         name: plpgsql
+    - name: create the db user
+      postgresql_user:
+        name: "{{ restya_user }}"
+        password: "{{ restya_pass }}"
+        state: present
+    - name: create the db itself    
+      postgresql_db:
+        name: "{{ restya_db }}"
+        state: present
+        owner: "{{ restya_user}}"
     - name: Import Postgres db
       command: psql -d  {{ restya_db }} -f  {{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U  {{ postgres_user }}"
     - name: Setup PHP 
