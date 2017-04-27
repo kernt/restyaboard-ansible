@@ -69,7 +69,7 @@
       name: "{{ restya_user }}"
       password: "{{ restya_pass }}"
       login_host: "{{ postgres_host }}"
-      login_user: "{{ postgres_user }}"
+      user: "{{ postgres_user }}"
       login_password: "{{ postgres_pass }}"
       port: "{{ postgres_port }}"
       state: present
