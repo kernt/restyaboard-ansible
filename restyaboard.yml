@@ -20,16 +20,8 @@
     smtp_host: []
     smtp_port: []
     timezone: "America/Los_Angeles"
-  tasks:
-    - name: ensure latest version of ansible
-      pip:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - ansible
-        - pip
-        - psycopg2
-    - name: install packages
+  tasks:    
+    - name: Install standard packages
       package:
         name: "{{ item }}"
         state: present
@@ -73,6 +65,14 @@
         - python-pip
         - expat
       become: true
+    - name: ensure latest version of ansible pip psycopg2
+      pip:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - ansible
+        - pip
+        - psycopg2
     - name: Grab git projects 
       git:
         repo: "{{ restya_github }}"
