@@ -1,5 +1,5 @@
 ---
-- hosts: local
+- hosts: all
     vars:
         restya_user: restya
         restya_pass: hjVl2!rGd22    
