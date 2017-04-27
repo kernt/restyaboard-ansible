@@ -1,25 +1,25 @@
 ---
 - hosts: all
     vars:
-        restya_user: restya
-        restya_pass: hjVl2!rGd22    
-        restya_db: restyaboard
-        restya_github: https://github.com/RestyaPlatform/board.git
-        restya_apps_github: https://github.com/RestyaPlatform/board-apps.git
-        restya_install_dir: /usr/share/nginx/html/restyaboard
-        download_dir: /opt/restyaboard
+        restya_user: "restya"
+        restya_pass: "hjVl2rGd22"    
+        restya_db: "restyaboard"
+        restya_github: "https://github.com/RestyaPlatform/board.git"
+        restya_apps_github: "https://github.com/RestyaPlatform/board-apps.git"
+        restya_install_dir: "/usr/share/nginx/html/restyaboard"
+        download_dir: "/opt/restyaboard"
         download_apps_dir: "{{ download_dir }}/client/apps"            
-        postgres_host: localhost
-        postgres_port: 5432
-        postgres_user: postgres
-        postgres_pass:  
-        postgres_conf: /etc/postgresql/9.5/main/pg_hba.conf
-        nginx_domain: my.exampledomain.com
-        smtp_user:
-        smtp_pass:
-        smtp_host:
-        smtp_port:
-        timezone: America/Los_Angeles    
+        postgres_host: "localhost"
+        postgres_port: "5432"
+        postgres_user: "postgres"
+        postgres_pass: [] 
+        postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf"
+        nginx_domain: "my.exampledomain.com"
+        smtp_user: []
+        smtp_pass: []
+        smtp_host: []
+        smtp_port: []
+        timezone: "America/Los_Angeles"
     tasks:
         - name: install packages
             package:
