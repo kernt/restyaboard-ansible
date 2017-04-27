@@ -1,38 +1,47 @@
-Role Name
+restyaboard-ansible
 =========
 
-A brief description of the role goes here.
+An ansible playbook to replace the bash install script with more flexibility given by ansible.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Latest version of ansible.
 
 Role Variables
 --------------
-
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+restya_user - restya database user name
+    restya_pass - restya database user password
+    restya_db - restya database name 
+    restya_github - git location of the restya project
+    restya_apps_github - git location of the restya apps
+    restya_install_dir - final install directory of restya
+    download_dir - where to put the git project at before installing
+    download_apps_dir - see previous      
+    postgres_host - what hostname or ip is the database on
+    postgres_port - what port is the db on
+    postgres_user - what is the username used to create the restya db and restya user
+    postgres_pass - what is the user password for the   
+    postgres_conf - postgresql conf file
+    nginx_domain - What is your domain name
+    smtp_user:
+    smtp_pass:
+    smtp_host:
+    smtp_port:
+    timezone: America/Los_Angeles    
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+restya project gits
 
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
 
 License
 -------
 
-BSD
+See associated
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+See our Shadey Security github for more great projects!
