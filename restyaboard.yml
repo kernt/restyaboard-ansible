@@ -47,6 +47,12 @@
     - libyaml-dev
     - rebar
     - curl
+    - debian-keyring 
+    - debian-archive-keyring
+    - libnl-3-200
+    - libnl-3-dev
+    - libnl-genl-3-200
+    - libnl-genl-3-dev
   postgresql_user:
     name: {{ restya_user }}
     password: {{ restya_pass }}
