@@ -139,8 +139,10 @@
     - name: Setup restya dir Perms
       file:
         path: "{{ item }}" 
-        mode: "775"
+        mode: "0775"
         state: directory
+        owner: www-data
+        group: www-data
       with_items:
         - "{{ restya_install_dir }}/media"
         - "{{ restya_install_dir }}/client/img"
@@ -149,8 +151,10 @@
     - name: Setup restya shell file perms      
       file:
         path: "{{ restya_install_dir }}/server/php/*.sh"
-        mode: "755"
+        mode: "0755"
         state: file
+        owner: www-data
+        group: www-data
       become: true
     - name: create restya db
       postgresql_ext:
