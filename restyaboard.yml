@@ -92,7 +92,7 @@
       lineinfile:
         path: /etc/php/7.0/fpm/php.ini
         regexp: ";date.timezone"
-        line: "date.timezone = "{{ timezone }}"
+        line: "date.timezone = {{ timezone }}"
         backup: yes
         create: yes 
       become: true
@@ -193,10 +193,10 @@
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }} "
       with_items:
-        - { regexp: "1021 i auth_username = "{{ smtp_user }}", line: "1021 i auth_username = "{{ smtp_user }}" }
-        - {    regexp: "1022 i auth_password = "{{ smtp_pass }}", line: "1022 i auth_password = "{{ smtp_pass }}" }
-        - { regexp: "SMTP = .*$", line: "SMTP = "{{ smtp_host }}" }
-        - { regexp: "smtp_port = .*$", line: "smtp_port = "{{ smtp_port }}" }
+        - { regexp: "1021 i auth_username = {{ smtp_user }}", line: "1021 i auth_username = {{ smtp_user }}" }
+        - {    regexp: "1022 i auth_password = {{ smtp_pass }}", line: "1022 i auth_password = {{ smtp_pass }}" }
+        - { regexp: "SMTP = .*$", line: "SMTP = {{ smtp_host }}" }
+        - { regexp: "smtp_port = .*$", line: "smtp_port = {{ smtp_port }}" }
       become: true
     - name: Restart services
       service:
