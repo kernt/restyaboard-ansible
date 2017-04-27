@@ -1,0 +1,61 @@
+---
+- hosts: local
+  vars:
+    username: restya
+    password: hjVl2!rGd22
+    install_dir: /opt/restyaboard
+    install_apps_dir: {{ install_dir }}/client/apps    
+    restya_github: https://github.com/RestyaPlatform/board.git
+    restya_apps_github: https://github.com/RestyaPlatform/board-apps.git
+    postgres_db: localhost
+    postgres_port: 5432
+    postgres_db: restyaboard
+  name: install packages
+    become: true
+    package:
+      name: "{{ item }}"
+      state: present
+  with_items:
+    - postgresql
+    - unzip
+    - nginx-full
+    - jq
+    - python-software-properties
+    - libjpeg8
+    - php
+    - php7.0-fpm
+    - php7.0-cli
+    - libpq5
+    - php7.0-pgsql
+    - php7.0-mbstring
+    - php7.0-ldap
+    - gcc
+    - imagemagick
+    - php7.0-imap
+    - php7.0-xml
+    - wget
+    - ca-certificates
+    - php7.0-geoip
+    - php7.0-dev
+    - libgeoip-dev
+    - geoip
+    - autotools-dev
+    - automake
+    - erlang
+    - libyaml-dev
+    - rebar
+    - curl
+  postgresql_user:
+    name: {{ username }}
+    password: {{ password }}
+    state: present
+  postgresql_db:
+    name: {{ postgres_db }}
+    state: present
+    owner: {{ username }}
+  git:
+    repo: {{ restya_github }}
+    dest: {{ install_dir }}
+  git:
+    repo: {{ restya_apps_github }}
+    dest: {{ install_dir_apps }}
