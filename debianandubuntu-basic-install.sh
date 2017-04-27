@@ -4,4 +4,6 @@
 sudo apt-get install python-pip python-dev libssl-dev build-essential libtool autoconf -y
 sudo pip install --upgrade pip
 sudo pip install ansible
-sudo ansible-playbook restyaboard.yml
+echo "[local]" >> /etc/ansible/hosts
+echo "localhost" >> /etc/ansible/hosts 
+sudo ansible-playbook restyaboard.yml -c local
