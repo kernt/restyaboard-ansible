@@ -111,8 +111,6 @@
         path: /usr/share/GeoIP
         state: directory
       become: true
-    - name: get geo data
-      command: get_geoip_data
     - name: setup nginx 
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
