@@ -99,7 +99,7 @@
       become: true
     - name: update postgres db conf
       copy:
-        src: "{{ playbook_dir }}/default/pg_hba.conf"
+        src: "{{ playbook_dir }}/defaults/pg_hba.conf"
         dest: "{{ postgres_conf }}"
         backup: yes
         create: yes
