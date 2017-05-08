@@ -26,6 +26,7 @@
     company: "Shadey Security Wannabe"
     cert_city: "Seattle"
     cert_state: "Washington"
+    nginx_port: 443
   tasks:    
     - name: Install standard packages
       package:
@@ -245,7 +246,18 @@
         src: "{{ ansible_dir }}/defaults/nginx.conf"
         dest: "/etc/nginx/nginx.conf"
         force: yes
-        backup: yes        
+        backup: yes    
+    - name: Setup Nginx Conf File to Use cert and domain
+      lineinfile:
+        path: "/etc/nginx/nginx.conf"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - { regexp: "server_name" , line: "server_name   {{ domain }} ;" }
+        - { regexp: "ssl_certificate" , line: "ssl_certificate   {{ domain }}.crt ;" }
+        - { regexp: "ssl_certificate_key" , line: "ssl_certificate_key   {{ domain }}.key;" }
+        - { regexp: "listen" , line: "listen    {{ nginx_port }} ssl;" }
+      become: true
     - name: Restart services
       command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
       become: true
