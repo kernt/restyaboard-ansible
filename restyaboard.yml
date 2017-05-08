@@ -177,6 +177,7 @@
       postgresql_user:
         name: "{{ restya_user }}"
         password: "{{ restya_pass }}"
+        priv: ALL
         state: present
       become: true
       become_user: postgres
