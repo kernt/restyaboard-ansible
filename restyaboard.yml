@@ -185,7 +185,7 @@
       become: true
       become_user: postgres
     - name: Import Postgres db
-      command: psql -d  {{ restya_db }} -f  {{ download_dir }}/sql/restyaboard_with_empty_data.sql" -U  {{ postgres_user }}"
+      command: "psql -d  {{ restya_db }} -f  {{ download_dir }}/sql/restyaboard_with_empty_data.sql" 
       become: true
       become_user: postgres
     - name: Setup PHP 
