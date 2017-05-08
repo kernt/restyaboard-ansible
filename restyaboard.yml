@@ -101,12 +101,13 @@
       lineinfile:
         path: "{{ postgres_conf }}"
         regexp: "{{ item }}"
-        line: "trust"
+        line: "host all postgres 127.0.0.1/8 trust"
         backup: yes
         create: yes
       with_items:
         - ident
         - peer
+        - md5
       become: true
     - name: enable geopip phpext
       lineinfile:
