@@ -225,13 +225,12 @@
         - { regexp: "smtp_port =", line: "smtp_port = {{ smtp_port }}" }
       become: true
     - name: Restart services
-      service:
-        name: "{{ item }} "
-        state: restarted
+      command: service "{{ item }} restart" # due to a bug with ansible and systemd, using this
+      become: true
       with_items:
         - "postgresql"
         - "cron"
         - "nginx"
         - "php7.0-fpm"
         - "postfix"
-      become: true
+
