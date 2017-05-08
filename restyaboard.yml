@@ -109,6 +109,7 @@
         src: "{{ playbook_dir }}/defaults/pg_hba.conf"
         dest: "{{ postgres_conf }}"
         backup: yes
+        owner: postgres
       become: true
     - name: enable geopip phpext
       lineinfile:
