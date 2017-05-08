@@ -165,11 +165,13 @@
         - webhook.sh
       become: true
     - name: create restya db
+      postgresql_db:
+        name: "{{ restya_db }}"
+      become: true
+      become_user: postgres
+    - name: add restya db extenstion
       postgresql_ext:
         db: "{{ restya_db }}"
-        login_host: "{{ postgres_host }}"
-        login_user: "{{ postgres_user }}"
-        login_password: "{{ postgres_pass }}"
         name: plpgsql
       become: true
       become_user: postgres
@@ -181,7 +183,7 @@
         state: present
       become: true
       become_user: postgres
-    - name: create the db itself    
+    - name: Make restya owner of it's db 
       postgresql_db:
         name: "{{ restya_db }}"
         state: present
