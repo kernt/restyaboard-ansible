@@ -171,8 +171,6 @@
         db: "{{ restya_db }}"
         login_host: "{{ postgres_host }}"
         login_user: "{{ postgres_user }}"
-        login_pass: "{{ postgres_pass }}"
-        port: "{{ postgres_port }}"
         name: plpgsql
     - name: create the db user
       postgresql_user:
