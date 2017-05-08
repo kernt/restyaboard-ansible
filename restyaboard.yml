@@ -99,7 +99,7 @@
       become: true
     - name: update postgres db conf
       copy:
-        src: "{{ download_dir }}/default/pg_hba.conf"
+        src: "./default/pg_hba.conf"
         dest: "{{ postgres_conf }}"
         backup: yes
         create: yes
