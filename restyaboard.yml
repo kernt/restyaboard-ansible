@@ -221,8 +221,8 @@
       with_items:
         - { regexp: "1021 i auth_username = {{ smtp_user }}", line: "1021 i auth_username = {{ smtp_user }}" }
         - { regexp: "1022 i auth_password = {{ smtp_pass }}", line: "1022 i auth_password = {{ smtp_pass }}" }
-        - { regexp: "SMTP \=", line: "SMTP = {{ smtp_host }}" }
-        - { regexp: "smtp_port \=", line: "smtp_port = {{ smtp_port }}" }
+        - { regexp: "SMTP =", line: "SMTP = {{ smtp_host }}" }
+        - { regexp: "smtp_port =", line: "smtp_port = {{ smtp_port }}" }
       become: true
     - name: Restart services
       service:
