@@ -155,9 +155,15 @@
       become: true
     - name: Setup restya shell file perms      
       file: 
-        path: "{{ restya_install_dir }}/server/php/shell/*.sh"
+        path: "{{ restya_install_dir }}/server/php/shell/{{ item }}"
         mode: 0755
-        state: file        
+        state: file  
+      with_items:
+        - card_due_notification.sh
+        - imap.sh
+        - instant_email_notification.sh
+        - periodic_email_notification.sh
+        - webhook.sh
       become: true
     - name: create restya db
       postgresql_ext:
