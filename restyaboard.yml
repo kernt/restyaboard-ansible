@@ -105,7 +105,7 @@
         create: yes 
       become: true
     - name: Ensure postgres is running
-      command: "service postgres start"
+      command: "service postgresql start"
       become: true
     - name: update postgres db conf
       copy:
