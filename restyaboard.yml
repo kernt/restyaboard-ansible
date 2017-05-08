@@ -104,6 +104,9 @@
         backup: yes
         create: yes 
       become: true
+    - name: Ensure postgres is running
+      command: "service postgres start"
+      become: true
     - name: update postgres db conf
       copy:
         src: "{{ playbook_dir }}/defaults/pg_hba.conf"
