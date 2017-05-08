@@ -104,7 +104,7 @@
         backup: yes
         create: yes 
       become: true
-    - Fix Ubuntu Locale Issue with Postgresql
+    - name: Fix Ubuntu Locale Issue with Postgresql
       lineinfile: 
         dest: dest=/etc/default/locale
         state: present
