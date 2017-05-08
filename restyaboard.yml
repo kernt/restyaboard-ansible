@@ -13,7 +13,7 @@
     postgres_port: [] # 5432
     postgres_user: "postgres"
     postgres_pass: [] 
-    postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf"
+    postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
     nginx_domain: "my.exampledomain.com"
     smtp_user: []
     smtp_pass: []
@@ -102,7 +102,6 @@
         src: "{{ playbook_dir }}/defaults/pg_hba.conf"
         dest: "{{ postgres_conf }}"
         backup: yes
-        create: yes
       become: true
     - name: enable geopip phpext
       lineinfile:
