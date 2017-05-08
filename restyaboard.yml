@@ -106,7 +106,7 @@
       become: true
     - name: Fix Ubuntu Locale Issue with Postgresql
       lineinfile: 
-        dest: dest=/etc/default/locale
+        dest: /etc/default/locale
         state: present
         line: "{{ item }}"
       with_items:
