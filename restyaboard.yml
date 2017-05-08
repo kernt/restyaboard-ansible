@@ -97,17 +97,12 @@
         backup: yes
         create: yes 
       become: true
-    - name: change auth params in postgres
-      lineinfile:
-        path: "{{ postgres_conf }}"
-        regexp: "{{ item }}"
-        line: "host all postgres 127.0.0.1/8 trust"
+    - name: update postgres db conf
+      copy:
+        src: "{{ download_dir }}/default/pg_hba.conf"
+        dest: "{{ postgres_conf }}"
         backup: yes
         create: yes
-      with_items:
-        - ident
-        - peer
-        - md5
       become: true
     - name: enable geopip phpext
       lineinfile:
