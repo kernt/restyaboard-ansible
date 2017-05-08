@@ -172,6 +172,7 @@
     - name: create restya db
       postgresql_db:
         name: "{{ restya_db }}"
+        state: present
       become: true
       become_user: postgres
     - name: add restya db extenstion
