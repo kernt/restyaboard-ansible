@@ -100,10 +100,13 @@
     - name: change auth params in postgres
       lineinfile:
         path: "{{ postgres_conf }}"
-        regexp: "(peer|ident)"
+        regexp: "{{ item }}"
         line: "trust"
         backup: yes
         create: yes
+      with_items:
+        - ident
+        - peer
       become: true
     - name: enable geopip phpext
       lineinfile:
