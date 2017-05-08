@@ -104,6 +104,16 @@
         backup: yes
         create: yes 
       become: true
+    - Fix Ubuntu Locale Issue with Postgresql
+      lineinfile: 
+        dest: dest=/etc/default/locale
+        state: present
+        line: "{{ item }}"
+      with_items:
+        - 'LANGUAGE="en_US:en"' 
+        - 'LC_ALL="en_US.UTF-8"'
+      become: true
+      when: ( ansible_distribution == "Debian" or ansible_distribution == "Ubuntu")
     - name: Ensure postgres is running
       command: "service postgresql start"
       become: true
@@ -242,8 +252,16 @@
       when: (domain != "my.exampledomain.com" and letsencrypt_challenge_name != "sample_com_challenge")
       become: true
       register: "{{ letsencrypt_challenge_name }}"
-    - name: Generate Self Signed Cert
-      command: "openssl req -new -nodes -x509 -subj '/C={{ cert_country }}/ST={{ cert_state }}/L={{ cert_city }}/O={{ company }}/CN=${ domain }' -days 3650 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt -extensions v3_ca creates=/etc/nginx/ssl/{{ domain }}.crt"
+    - name: Generate Self Signed Private Key
+      openssl_privatekey:
+        path: "/etc/nginx/ssl/{{ domain }}.key"
+        size: 4096        
+      become: true
+      when: (domain == "my.exampledomain.com" or letsencrypt_challenge_name == "sample_com_challenge")
+    - name: Generate Self Signed Public Cert
+      openssl_publickey:
+        path: "/etc/nginx/ssl/{{ domain }}.crt"
+        force: true
       become: true
       when: (domain == "my.exampledomain.com" or letsencrypt_challenge_name == "sample_com_challenge")
     - name: Copy Nginx Config Over
