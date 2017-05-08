@@ -184,11 +184,6 @@
         state: present
       become: true
       become_user: postgres
-    - name: Make restya owner of it's db 
-      postgresql_db:
-        name: "{{ restya_db }}"
-        state: present
-        owner: "{{ restya_user}}"
     - name: Import Postgres db
       command: psql -d  {{ restya_db }} -f  {{ restya_db }}/sql/restyaboard_with_empty_data.sql" -U  {{ postgres_user }}"
     - name: Setup PHP 
