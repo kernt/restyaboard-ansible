@@ -1,6 +1,6 @@
 #! /bin/bash
 # If you are running a debian variant with apt-get this should work for local install... we do not support this script, however.
-if [ "$1" == '-r' ] ; then 
+if [ "$1" = '-r' ] ; then 
   echo "restarting from last state."
   sudo ansible-playbook restyaboard.yml -c local  --limit @/home/$USER/restyaboard.retry
 else
