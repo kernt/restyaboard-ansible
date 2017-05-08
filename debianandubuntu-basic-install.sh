@@ -3,7 +3,7 @@
 if [ "$1" = '-r' ] ; then 
   echo "restarting from last state."
   sudo -u $USER git pull
-  sudo ansible-playbook restyaboard.yml -c local  --limit @/home/$USER/restyaboard.retry
+  ansible-playbook restyaboard.yml -c local  --limit @/home/$USER/restyaboard.retry
 else
   sudo -u $USER git pull
   sudo apt-get install python-pip python-dev libssl-dev build-essential libtool autoconf -y
