@@ -10,6 +10,7 @@
     download_dir: "/opt/restyaboard"
     download_apps_dir: "{{ download_dir }}/client/apps"      
     postgres_host: "localhost"
+    postgres_port: [] # 5432
     postgres_user: "postgres"
     postgres_pass: [] 
     postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf"
