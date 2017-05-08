@@ -86,6 +86,7 @@
         - ansible
         - pip
         - psycopg2
+        - pyOpenSSL
     - name: Grab git projects 
       git:
         repo: "{{ restya_github }}"
