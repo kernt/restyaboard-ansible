@@ -274,7 +274,7 @@
         - { regexp: "emailAddress", line: " emailAddress_default = {{ admin_email }}" }
       become: true        
     - name: Create Self Signed Certificates
-      command: "openssl req -config {{ playbook_dir}}/defaults/ssl-request.conf -sha512 -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
+      command: "openssl req -prompt no -config {{ playbook_dir}}/defaults/ssl-request.conf -sha512 -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
       become: true
       when: letsencrypt_challenge_name == "sample_com_challenge"
     - name: Copy Nginx Config Over
