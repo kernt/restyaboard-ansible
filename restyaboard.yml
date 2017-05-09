@@ -197,10 +197,10 @@
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
       with_items:
-        - { regexp: "C \=" , line: "C = {{ cert_country }}" }
-        - { regexp: "ST \=", line: "ST = {{ cert_state }}" }
-        - { regexp: "L \=", line: "L = {{ cert_city }}" }
-        - { regexp: "O \=", line: "O = {{ company }}" }
+        - { regexp: "C =" , line: "C = {{ cert_country }}" }
+        - { regexp: "ST =", line: "ST = {{ cert_state }}" }
+        - { regexp: "L =", line: "L = {{ cert_city }}" }
+        - { regexp: "O =", line: "O = {{ company }}" }
         - { regexp: "emailAddress", line: " emailAddress = {{ admin_email }}" }
       become: true        
     - name: Create Self Signed Certificates
