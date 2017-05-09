@@ -18,4 +18,5 @@
     - name: Run Setup NGINX
       when: provider == "nginx"
       include: "{{ playbook_dir }}/tasks/setup-nginx.yml"
-      
+    - name: Run Generic App Setup
+      include: "{{ playbook_dir }}/tasks/setup-generic.yml"
