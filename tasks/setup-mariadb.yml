@@ -11,6 +11,9 @@
         - mariadb-client
         - dbconfig-common
         - dbconfig-mysql
+        - python3-mysqldb
+        - python3-pymysql
+        - python-pymysql
     - name: Fix Ubuntu Locale Issue 
       lineinfile: 
         dest: /etc/default/locale
