@@ -9,10 +9,10 @@
     - name: Run Setup Postgres
       include: "{{ playbook_dir }}/tasks/setup-postgresql.yml"
       when: database == "postgresql"
-    - name: Run Setup MariaDB
-      when: ( database == "mysql" or database == "mariadb" )
-      include "{{ playbook_dir }}/tasks/setup-mariadb.yml"
-    - name: Run Setup Apache2
+#    - name: Run Setup MariaDB # Not currently supported :(
+#      when: ( database == "mysql" or database == "mariadb" )
+#      include "{{ playbook_dir }}/tasks/setup-mariadb.yml"
+    - name: Run Setup Apache2 
       include: "{{ playbook_dir }}/tasks/setup-apache2.yml"
       when: (provider == "apache2" or provider == "httpd" )
     - name: Run Setup NGINX
