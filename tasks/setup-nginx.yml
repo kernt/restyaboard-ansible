@@ -61,6 +61,7 @@
     force: yes
     backup: yes  
   when: ( stage == "dev" or stage == "latest" )
+  become: true
 - name: Setup Nginx Conf File to Use cert and domain
   lineinfile:
     path: "/etc/nginx/nginx.conf"
