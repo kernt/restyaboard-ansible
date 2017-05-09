@@ -23,6 +23,8 @@
     - { regexp: "root.*html", line: "root  {{ restya_install_dir }};" }  
     - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
     - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
+    - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
+    - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
 - name: Create NGINX SSL Directory
   file:
     path: /etc/nginx/ssl
@@ -54,24 +56,6 @@
   command: "openssl req  -config {{ playbook_dir}}/defaults/ssl-request.conf -sha512 -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
   become: true
   when: letsencrypt_challenge_name == "sample_com_challenge"
-- name: Copy Nginx Config Over
-  copy:
-    src: "{{ playbook_dir }}/defaults/nginx.conf"
-    dest: "/etc/nginx/nginx.conf"
-    force: yes
-    backup: yes  
-  when: ( stage == "dev" or stage == "latest" )
-  become: true
-- name: Setup Nginx Conf File to Use cert and domain
-  lineinfile:
-    path: "/etc/nginx/nginx.conf"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
-    - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
-    - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
-  become: true
 - name: Ensure certs are in unix format
   command: "{{ item }}"
   become: true
