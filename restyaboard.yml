@@ -14,7 +14,7 @@
     postgres_user: "postgres"
     postgres_pass: [] 
     postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
-    domain: "{{ ansible_fqdn }} "
+    domain: "example.com"
     smtp_user: []
     smtp_pass: []
     smtp_host: []
