@@ -267,6 +267,7 @@
       when: (domain == "my.exampledomain.com" or letsencrypt_challenge_name == "sample_com_challenge")
     - name: Generate Self Signed Public Cert
       openssl_publickey:
+        privatekey_path: "/etc/nginx/ssl/{{ domain }}.key"
         path: "/etc/nginx/ssl/{{ domain }}.crt"
         force: true
       become: true
