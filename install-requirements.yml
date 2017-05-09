@@ -28,7 +28,7 @@
     cert_state: "Washington"
     web_port: 443
     provider: "nginx" # apache2 works
-    stage: "stable" #dev works too
+    stage: "stable" #dev or latest works too
   tasks:    
     - name: Install standard packages
       package:
