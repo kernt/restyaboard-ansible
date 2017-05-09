@@ -292,8 +292,8 @@
       file:
         path: "{{ item }}"
         mode: 500
-        owner: nginx
-        group: nginx
+        owner: www-data
+        group: www-data
         state: file
       with_items:
         - /etc/nginx/ssl/{{ domain }}.crt
