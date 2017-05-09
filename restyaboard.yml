@@ -259,18 +259,10 @@
       when: letsencrypt_challenge_name != "sample_com_challenge"
       become: true
       register: "{{ letsencrypt_challenge_name }}"
-    - name: Generate Self Signed Private Key
-      openssl_privatekey:
-        path: "/etc/nginx/ssl/{{ domain }}.key"
-        size: 4096  
-        force: true
-      become: true
-      when: letsencrypt_challenge_name == "sample_com_challenge"
-    - name: Generate Self Signed Public Cert
-      openssl_publickey:
-        privatekey_path: "/etc/nginx/ssl/{{ domain }}.key"
-        path: "/etc/nginx/ssl/{{ domain }}.crt"
-        force: true
+    - name: Create Self Signed Certificates
+      command: "{{ item }}"
+      with_items:
+        - "openssl req -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
       become: true
       when: letsencrypt_challenge_name == "sample_com_challenge"
     - name: Copy Nginx Config Over
