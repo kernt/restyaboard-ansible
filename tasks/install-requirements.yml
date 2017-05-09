@@ -91,3 +91,9 @@
     dest: "{{ download_dir }}"
   become: true
   when: stage == ("stable" or stage == "latest")
+- name: ensure download is readable
+  file:
+    path: "{{ download_dir }}"
+    mode: 0755
+    recurse: yes
+  become: true
