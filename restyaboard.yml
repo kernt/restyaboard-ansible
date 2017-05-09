@@ -26,7 +26,9 @@
     company: "Shadey Security Wannabe"
     cert_city: "Seattle"
     cert_state: "Washington"
-    nginx_port: 443
+    web_port: 443
+    provider: "nginx" # apache2 works
+    stage: "stable" #dev works too
   tasks:    
     - name: setup php timezone
       lineinfile:
@@ -222,7 +224,7 @@
         - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
         - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
         - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
-        - { regexp: ".*listen .*$" , line: "listen    {{ nginx_port }} ssl;" }
+        - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
       become: true
     - name: Ensure certs are in unix format
       command: "{{ item }}"
