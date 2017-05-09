@@ -267,11 +267,11 @@
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
       with_items:
-        - { regexp: "countryName" , line: "countryName_default = {{ cert_country }}" }
-        - { regexp: "stateOrProvinceName", line: "stateOrProvinceName_default = {{ cert_state }}" }
-        - { regexp: "localityName", line: "localityName_default  = {{ cert_city }}" }
-        - { regexp: "organizationName", line: "organizationName_default = {{ company }}" }
-        - { regexp: "emailAddress", line: " emailAddress_default = {{ admin_email }}" }
+        - { regexp: "C \=" , line: "C = {{ cert_country }}" }
+        - { regexp: "ST \=", line: "ST = {{ cert_state }}" }
+        - { regexp: "L \=", line: "L = {{ cert_city }}" }
+        - { regexp: "O \=", line: "O = {{ company }}" }
+        - { regexp: "emailAddress", line: " emailAddress = {{ admin_email }}" }
       become: true        
     - name: Create Self Signed Certificates
       command: "openssl req  -config {{ playbook_dir}}/defaults/ssl-request.conf -sha512 -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
