@@ -1,66 +1,64 @@
----
-- hosts: all  
-  tasks:    
-    - name: Install Postgresql DB
-      package:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - postgresql
-    - name: Ensure postgres is running
-      command: "service postgresql start"
-      become: true
-    - name: update postgres db conf
-      copy:
-        src: "{{ playbook_dir }}/defaults/pg_hba.conf"
-        dest: "{{ postgres_conf }}"
-        backup: yes
-        owner: postgres
-      become: true
-    - name: create restya db
-      postgresql_db:
-        name: "{{ restya_db }}"
-        state: present
-      become: true
-      become_user: postgres
-    - name: add restya db extenstion
-      postgresql_ext:
-        db: "{{ restya_db }}"
-        name: plpgsql
-      become: true
-      become_user: postgres
-    - name: create the db user
-      postgresql_user:
-        name: "{{ restya_user }}"
-        password: "{{ restya_pass }}"
-        db: "{{ restya_db }}"
-        priv: ALL
-        state: present
-      become: true
-      become_user: postgres
-    - name: Import Postgres db
-      command: "psql -d  {{ restya_db }} -f  {{ download_dir }}/sql/restyaboard_with_empty_data.sql" 
-      become: true
-      become_user: postgres
-    - name: Setup PHP 
-      lineinfile:
-        path: "{{ item.path }}"
-        regexp: "{{ item.reg }}" 
-        line: "{{ item.line }}"
-        backup: yes
-        create: yes
-      with_items:
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_NAME'.*$", line: "define('R_DB_NAME', '{{ restya_db }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ db_user }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ db_pass }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ db_host }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ db_port }}');" }
-      become: yes
-    - name: Restart services
-      command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
-      become: true
-      with_items:
-        - "postgresql"
-        - "php7.0-fpm"
+---  
+- name: Install Postgresql DB
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - postgresql
+- name: Ensure postgres is running
+  command: "service postgresql start"
+  become: true
+- name: update postgres db conf
+  copy:
+    src: "{{ playbook_dir }}/defaults/pg_hba.conf"
+    dest: "{{ postgres_conf }}"
+    backup: yes
+    owner: postgres
+  become: true
+- name: create restya db
+  postgresql_db:
+    name: "{{ restya_db }}"
+    state: present
+  become: true
+  become_user: postgres
+- name: add restya db extenstion
+  postgresql_ext:
+    db: "{{ restya_db }}"
+    name: plpgsql
+  become: true
+  become_user: postgres
+- name: create the db user
+  postgresql_user:
+    name: "{{ restya_user }}"
+    password: "{{ restya_pass }}"
+    db: "{{ restya_db }}"
+    priv: ALL
+    state: present
+  become: true
+  become_user: postgres
+- name: Import Postgres db
+  command: "psql -d  {{ restya_db }} -f  {{ download_dir }}/sql/restyaboard_with_empty_data.sql" 
+  become: true
+  become_user: postgres
+- name: Setup PHP 
+  lineinfile:
+    path: "{{ item.path }}"
+    regexp: "{{ item.reg }}" 
+    line: "{{ item.line }}"
+    backup: yes
+    create: yes
+  with_items:
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_NAME'.*$", line: "define('R_DB_NAME', '{{ restya_db }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ db_user }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ db_pass }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ db_host }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ db_port }}');" }
+  become: yes
+- name: Restart services
+  command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
+  become: true
+  with_items:
+    - "postgresql"
+    - "php7.0-fpm"
 
 
