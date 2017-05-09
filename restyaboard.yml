@@ -290,6 +290,12 @@
         - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
         - { regexp: ".*listen .*$" , line: "listen    {{ nginx_port }} ssl;" }
       become: true
+    - name: Ensure certs are in unix format
+      command: "{{ item }}"
+      become: true
+      with_items:
+        - "dos2unix /etc/nginx/ssl/{{ domain }}.crt"
+        - "dos2unix /etc/nginx/ssl/{{ domain }}.key"
     - name: ensure permissions for nginx
       file:
         path: "{{ item }}"
@@ -302,12 +308,6 @@
         - /etc/nginx/ssl/{{ domain }}.key
         - /etc/nginx/nginx.conf
       become: true
-    - name: Ensure certs are in unix format
-      command: "{{ item }}"
-      become: true
-      with_items:
-        - "dos2unix /etc/nginx/ssl/{{ domain }}.crt"
-        - "dos2unix /etc/nginx/ssl/{{ domain }}.key"
     - name: Restart services
       command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
       become: true
