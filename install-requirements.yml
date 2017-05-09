@@ -26,7 +26,9 @@
     company: "Shadey Security Wannabe"
     cert_city: "Seattle"
     cert_state: "Washington"
-    nginx_port: 443
+    web_port: 443
+    provider: "nginx" # apache2 works
+    stage: "stable" #dev works too
   tasks:    
     - name: Install standard packages
       package:
@@ -34,8 +36,8 @@
         state: present
       with_items:
         - postgresql
+        - apparmor
         - unzip
-        - nginx-full
         - jq
         - python-software-properties
         - libjpeg8
@@ -77,6 +79,37 @@
         - build-essential 
         - libtool 
         - autoconf
+        - fail2ban
+      become: true
+    - name: Install NGINX Packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - nginx_full
+      when: provder == "nginx"  
+    - name: Install Apache Packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - apache2 # I might have to change this to look for apache2 on debian and httpd on rhel variants
+        - libapache2-mod-security2
+        - libapache2-mod-evasive 
+        - libapache2-mod-apparmor 
+        - libapache2-mod-ruwsgi
+      when: provider == "apache2"
+      become: true
+    - name: Enable Apache2 Modules
+      apache2_module:
+        name: "{{ item }}"
+      with_items:
+        - security2
+        - evasive
+        - rewrite
+        - ruwsgi 
+        - apparmor
+      when: provider == "apache2"
       become: true
     - name: Install Pip packages
       pip:
@@ -88,13 +121,30 @@
         - psycopg2
         - pyOpenSSL
         - pexpect
+      become: true
     - name: Grab git projects 
       git:
         repo: "{{ restya_github }}"
         dest: "{{ download_dir }}"
       become: true
+      when: stage == "dev"
     - name: Grab restya git apps
       git:
         repo: "{{ restya_apps_github }}"
         dest: "{{ download_apps_dir }}"
       become: true
+      when: stage == "dev"
+    - name: Grab Latest Release
+      get_url:
+        "url: https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
+        dest: "{{ download_dir }}"
+        validate_certs: no
+      become: true
+      when: stage == ("stable" or stage == "latest")
+    - name: Unzip Latest Release
+      unarchive:
+        src: "{{ download_dir }}/board-v0.4.2.zip"
+        dest: "{{ download_dir }]"
+      become: true
+      when: stage == ("stable" or stage == "latest")
+        
