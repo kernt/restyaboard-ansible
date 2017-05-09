@@ -17,7 +17,7 @@
   replace:
     path: /etc/nginx/conf.d/restyaboard.conf
     regexp: "{{ item.regexp }}"
-    replace "{{ item.line }}" 
+    replace: "{{ item.line }}" 
     backup: yes
   with_items:
     - { regexp: "root", line: "root  {{ restya_install_dir }};" }  
