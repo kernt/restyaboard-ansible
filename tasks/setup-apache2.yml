@@ -1,99 +1,97 @@
 ---
-- hosts: all  
-  tasks:    
-    - name: Install Apache Packages
-      package:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - apache2 # I might have to change this to look for apache2 on debian and httpd on rhel variants
-        - libapache2-mod-security2
-        - libapache2-mod-evasive 
-        - libapache2-mod-apparmor 
-        - libapache2-mod-ruwsgi
-      become: true
-    - name: Enable Apache2 Modules
-      apache2_module:
-        name: "{{ item }}"
-      with_items:
-        - security2
-        - evasive
-        - rewrite
-        - ruwsgi 
-        - apparmor
-        - ssl
-      become: true    
-    - name: Create Apache2 SSL Directory
-      file:
-        path: /etc/apache2/ssl
-        state: directory
-        mode: 0755
-      become: true
-    - name: Enable Let's Encrypt
-      letsencrypt:
-        account_key: "/etc/apache2/ssl/account.key"
-        csr: "/etc/apache2/ssl/{{ domain }}.csr"
-        dest: "/etc/apache2/ssl/{{ domain }}.crt"
-      when: letsencrypt_challenge_name != "sample_com_challenge"
-      become: true
-      register: "{{ letsencrypt_challenge_name }}"
-    - name: Prepare Self Sign SSL Config File
-      when: letsencrypt_challenge_name == "sample_com_challenge"
-      lineinfile:
-        path: "{{ playbook_dir}}/defaults/ssl-request.conf"
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      with_items:
-        - { regexp: "C =" , line: "C = {{ cert_country }}" }
-        - { regexp: "ST =", line: "ST = {{ cert_state }}" }
-        - { regexp: "L =", line: "L = {{ cert_city }}" }
-        - { regexp: "O =", line: "O = {{ company }}" }
-        - { regexp: "emailAddress", line: " emailAddress = {{ admin_email }}" }
-      become: true        
-    - name: Create Self Signed Certificates
-      command: "openssl req  -config {{ playbook_dir}}/defaults/ssl-request.conf -sha512 -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/apache2/ssl/{{ domain }}.key -out /etc/apache2/ssl/{{ domain }}.crt"
-      become: true
-      when: letsencrypt_challenge_name == "sample_com_challenge"
-    - name: Copy Nginx Config Over
-      copy:
-        src: "{{ playbook_dir }}/defaults/apache2.conf"
-        dest: "/etc/apache2/apache2.conf"
-        force: yes
-        backup: yes    
-    - name: Setup Nginx Conf File to Use cert and domain # TODO REVIEW THIS
-      lineinfile:
-        path: "/etc/nginx/nginx.conf"
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      with_items:
-        - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
-        - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
-        - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
-        - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
-      become: true
-    - name: Ensure certs are in unix format
-      command: "{{ item }}"
-      become: true
-      with_items:
-        - "dos2unix /etc/nginx/ssl/{{ domain }}.crt"
-        - "dos2unix /etc/nginx/ssl/{{ domain }}.key"
-    - name: ensure permissions for nginx
-      file:
-        path: "{{ item }}"
-        mode: 0500
-        owner: www-data
-        group: www-data
-        state: file
-      with_items:
-        - /etc/apache2/ssl/{{ domain }}.crt
-        - /etc/apache2/ssl/{{ domain }}.key
-        - /etc/apache2/apache2.conf
-      become: true
-    - name: Restart services
-      command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
-      become: true
-      with_items:
-        - "apache2"
-        - "php7.0-fpm"
+- name: Install Apache Packages
+ package:
+   name: "{{ item }}"
+   state: present
+ with_items:
+   - apache2 # I might have to change this to look for apache2 on debian and httpd on rhel variants
+   - libapache2-mod-security2
+   - libapache2-mod-evasive 
+   - libapache2-mod-apparmor 
+   - libapache2-mod-ruwsgi
+ become: true
+- name: Enable Apache2 Modules
+ apache2_module:
+   name: "{{ item }}"
+ with_items:
+   - security2
+   - evasive
+   - rewrite
+   - ruwsgi 
+   - apparmor
+   - ssl
+ become: true    
+- name: Create Apache2 SSL Directory
+ file:
+   path: /etc/apache2/ssl
+   state: directory
+   mode: 0755
+ become: true
+- name: Enable Let's Encrypt
+ letsencrypt:
+   account_key: "/etc/apache2/ssl/account.key"
+   csr: "/etc/apache2/ssl/{{ domain }}.csr"
+   dest: "/etc/apache2/ssl/{{ domain }}.crt"
+ when: letsencrypt_challenge_name != "sample_com_challenge"
+ become: true
+ register: "{{ letsencrypt_challenge_name }}"
+- name: Prepare Self Sign SSL Config File
+ when: letsencrypt_challenge_name == "sample_com_challenge"
+ lineinfile:
+   path: "{{ playbook_dir}}/defaults/ssl-request.conf"
+   regexp: "{{ item.regexp }}"
+   line: "{{ item.line }}"
+ with_items:
+   - { regexp: "C =" , line: "C = {{ cert_country }}" }
+   - { regexp: "ST =", line: "ST = {{ cert_state }}" }
+   - { regexp: "L =", line: "L = {{ cert_city }}" }
+   - { regexp: "O =", line: "O = {{ company }}" }
+   - { regexp: "emailAddress", line: " emailAddress = {{ admin_email }}" }
+ become: true        
+- name: Create Self Signed Certificates
+ command: "openssl req  -config {{ playbook_dir}}/defaults/ssl-request.conf -sha512 -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/apache2/ssl/{{ domain }}.key -out /etc/apache2/ssl/{{ domain }}.crt"
+ become: true
+ when: letsencrypt_challenge_name == "sample_com_challenge"
+- name: Copy Nginx Config Over
+ copy:
+   src: "{{ playbook_dir }}/defaults/apache2.conf"
+   dest: "/etc/apache2/apache2.conf"
+   force: yes
+   backup: yes    
+- name: Setup Nginx Conf File to Use cert and domain # TODO REVIEW THIS
+ lineinfile:
+   path: "/etc/nginx/nginx.conf"
+   regexp: "{{ item.regexp }}"
+   line: "{{ item.line }}"
+ with_items:
+   - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
+   - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
+   - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
+   - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
+ become: true
+- name: Ensure certs are in unix format
+ command: "{{ item }}"
+ become: true
+ with_items:
+   - "dos2unix /etc/nginx/ssl/{{ domain }}.crt"
+   - "dos2unix /etc/nginx/ssl/{{ domain }}.key"
+- name: ensure permissions for nginx
+ file:
+   path: "{{ item }}"
+   mode: 0500
+   owner: www-data
+   group: www-data
+   state: file
+ with_items:
+   - /etc/apache2/ssl/{{ domain }}.crt
+   - /etc/apache2/ssl/{{ domain }}.key
+   - /etc/apache2/apache2.conf
+ become: true
+- name: Restart services
+ command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
+ become: true
+ with_items:
+   - "apache2"
+   - "php7.0-fpm"
 
 
