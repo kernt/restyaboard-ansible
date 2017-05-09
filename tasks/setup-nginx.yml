@@ -9,6 +9,14 @@
         state: present
       with_items:
         - nginx_full
+    - name: Copy restya nginx config to nginx
+      copy:
+        src: "{{ download_dir }}/restyaboard.conf"
+        dest: "/etc/nginx/conf.d/restyaboard.conf"
+        owner: www-data
+        group: www-data
+        mode: 0555
+      become: true
     - name: setup nginx 
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
@@ -17,6 +25,8 @@
         create: yes
       with_items:
         - { regexp: "root.*html", line: "root  {{ restya_install_dir }};" }  
+        - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
+        - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
     - name: Create NGINX SSL Directory
       file:
         path: /etc/nginx/ssl
