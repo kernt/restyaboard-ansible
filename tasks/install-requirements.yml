@@ -60,6 +60,12 @@
     - pyOpenSSL
     - pexpect
   become: true
+- name: setup install dir
+  file:
+    path: {{ download_dir }}
+    force: yes
+    state: directory
+  become: true
 - name: Grab git projects 
   git:
     repo: "{{ restya_github }}"
@@ -74,7 +80,7 @@
   when: stage == "dev"
 - name: Grab Latest Release
   get_url:
-    url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
+    url: "{{ stable_url }}"
     dest: "{{ download_dir }}"
     validate_certs: no
   become: true
