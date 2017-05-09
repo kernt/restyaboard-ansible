@@ -260,9 +260,35 @@
       become: true
       register: "{{ letsencrypt_challenge_name }}"
     - name: Create Self Signed Certificates
-      command: "{{ item }}"
-      with_items:
-        - "openssl req -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
+      shell: |
+        set timeout 300
+        spawn openssl req -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
+        
+        expect "Country Name (2 letter code) [AU]:"
+        send "{{ cert_country }}"
+        
+        expect "State or Province Name (full name) [Some-State]:"
+        send "{{ cert_state }}"
+        
+        expect "Locality Name (eg, city) []:"
+        send "{{ cert_city {{"
+        
+        expect "Organization Name (eg, company) [Internet Widgits Pty Ltd]:"
+        send "{{ company }}"
+        
+        expect "Organizational Unit Name (eg, section) []:"
+        send "\n"
+        
+        expect "Common Name (e.g. server FQDN or YOUR name) []:"
+        send "{{ domain }}"
+        
+        expect "Email Address []:"
+        send "{{ admin_email }}"
+        
+        exit 0
+      args:
+        executable: /usr/bin/expect
+      delegate_to: localhost
       become: true
       when: letsencrypt_challenge_name == "sample_com_challenge"
     - name: Copy Nginx Config Over
