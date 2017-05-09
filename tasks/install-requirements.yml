@@ -1,7 +1,7 @@
 ---
 - hosts: all   
   vars_files:
-    - "{{ playbook_dir }}/vars/main.yml"
+    - "vars/main.yml"
   tasks: 
     - name: Install standard packages
       package:
