@@ -13,7 +13,6 @@
         - libapache2-mod-evasive 
         - libapache2-mod-apparmor 
         - libapache2-mod-ruwsgi
-      when: provider == "apache2"
       become: true
     - name: Enable Apache2 Modules
       apache2_module:
@@ -24,7 +23,7 @@
         - rewrite
         - ruwsgi 
         - apparmor
-      when: provider == "apache2"
+        - ssl
       become: true    
     - name: Create Apache2 SSL Directory
       file:
