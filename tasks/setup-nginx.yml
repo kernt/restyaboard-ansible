@@ -14,17 +14,18 @@
     mode: 0555
   become: true
 - name: setup nginx config
-  become: true
   replace:
     path: /etc/nginx/conf.d/restyaboard.conf
     regexp: "{{ item.regexp }}"
-    replace "{{ item.line }}"    
+    replace "{{ item.line }}" 
+    backup: yes
   with_items:
     - { regexp: "root", line: "root  {{ restya_install_dir }};" }  
     - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
     - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
     - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
     - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
+  become: true
 - name: Create NGINX SSL Directory
   file:
     path: /etc/nginx/ssl
