@@ -1,73 +1,71 @@
 ---
-- hosts: all  
-  tasks:    
-    - name: Install mariadb
-      package:
-        name: "{{ item }}"
-      with_items:
-        - mariadb-server
-        - mariadb-client
-        - dbconfig-common
-        - dbconfig-mysql
-        - python3-mysqldb
-        - python3-pymysql
-        - python-pymysql
-    - name: Fix Ubuntu Locale Issue 
-      lineinfile: 
-        dest: /etc/default/locale
-        state: present
-        line: "{{ item }}"
-      with_items:
-        - 'LANGUAGE="en_US:en"' 
-        - 'LC_ALL="en_US.UTF-8"'
-      become: true
-      when: ( ansible_distribution == "Debian" or ansible_distribution == "Ubuntu")
-    - name: Ensure mariadb is running
-      command: "service mariadb start"
-      become: true
-    - name: create restya db
-      mysql_db:
-        name: "{{ restya_db }}"
-        state: import
-        login_user: "{{ db_user }}"
-        login_password: "{{ db_pass }}"
-        login_host: "{{ db_host }}"
-        login_port: "{{ db_port }}"
-        target: "{{ playbook_dir }}/defaults/mariadb-default.sql"
-      become: true
-      become_user: mysql
-    - name: create the db user
-      mysql_user:
-        name: "{{ restya_user }}"
-        password: "{{ restya_pass }}"
-        db: "{{ restya_db }}"
-        check_implicit_admin: yes
-        login_user: "{{ db_user }}"
-        login_password: "{{ db_pass }}"
-        login_host: "{{ db_host }}"
-        login_port: "{{ db_port }}"
-        priv: ALL
-        state: present
-      become: true
-      become_user: mysql
-    - name: Setup PHP 
-      lineinfile:
-        path: "{{ item.path }}"
-        regexp: "{{ item.reg }}" 
-        line: "{{ item.line }}"
-        backup: yes
-        create: yes
-      with_items:
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_NAME'.*$", line: "define('R_DB_NAME', '{{ restya_db }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ db_user }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ db_pass }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ db_host }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ db_port }}');" }
-      become: yes
-    - name: Restart services
-      command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
-      become: true
-      with_items:
-        - "mysql"
+- name: Install mariadb
+  package:
+    name: "{{ item }}"
+  with_items:
+    - mariadb-server
+    - mariadb-client
+    - dbconfig-common
+    - dbconfig-mysql
+    - python3-mysqldb
+    - python3-pymysql
+    - python-pymysql
+- name: Fix Ubuntu Locale Issue 
+  lineinfile: A
+    dest: /etc/default/locale
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - 'LANGUAGE="en_US:en"' 
+    - 'LC_ALL="en_US.UTF-8"'
+  become: true
+  when: ( ansible_distribution == "Debian" or ansible_distribution == "Ubuntu")
+- name: Ensure mariadb is running
+  command: "service mariadb start"
+  become: true
+- name: create restya db
+  mysql_db:
+    name: "{{ restya_db }}"
+    state: import
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_pass }}"
+    login_host: "{{ db_host }}"
+    login_port: "{{ db_port }}"
+    target: "{{ playbook_dir }}/defaults/mariadb-default.sql"
+  become: true
+  become_user: mysql
+- name: create the db user
+  mysql_user:
+    name: "{{ restya_user }}"
+    password: "{{ restya_pass }}"
+    db: "{{ restya_db }}"
+    check_implicit_admin: yes
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_pass }}"
+    login_host: "{{ db_host }}"
+    login_port: "{{ db_port }}"
+    priv: ALL
+    state: present
+  become: true
+  become_user: mysql
+- name: Setup PHP 
+  lineinfile:
+    path: "{{ item.path }}"
+    regexp: "{{ item.reg }}" 
+    line: "{{ item.line }}"
+    backup: yes
+    create: yes
+  with_items:
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_NAME'.*$", line: "define('R_DB_NAME', '{{ restya_db }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ db_user }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ db_pass }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ db_host }}');" }
+    - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ db_port }}');" }
+  become: yes
+- name: Restart services
+  command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
+  become: true
+  with_items:
+    - "mysql"
 
 
