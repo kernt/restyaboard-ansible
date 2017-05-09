@@ -1,104 +1,102 @@
----
-- hosts: all  
-  tasks:    
-    - name: Include Vars
-      include: "{{ playbook_dir }}/vars/main.yml"
-    - name: setup php timezone
-      lineinfile:
-        path: /etc/php/7.0/fpm/php.ini
-        regexp: ";date.timezone"
-        line: "date.timezone = {{ timezone }}"
-        backup: yes
-        create: yes 
-      become: true
-    - name: Fix Ubuntu Locale Issue with Postgresql
-      lineinfile: 
-        dest: /etc/default/locale
-        state: present
-        line: "{{ item }}"
-      with_items:
-        - 'LANGUAGE="en_US:en"' 
-        - 'LC_ALL="en_US.UTF-8"'
-      become: true
-      when: ( ansible_distribution == "Debian" or ansible_distribution == "Ubuntu")
-    - name: enable geopip phpext
-      lineinfile:
-        path: /etc/php.ini
-        regexp: "extension=geoip.so"
-        line: "extension=geoip.so"
-        backup: yes
-        create: yes  
-    - name: Create geoip dir
-      file:
-        path: /usr/share/GeoIP
-        state: directory
-      become: true
-    - name: Create restya install dir
-      file:
-        mode: 0775
-        state: directory
-        path: "{{ download_dir }}"
-      become: true
-    - name: Move restya to install dir
-      synchronize:
-        mode: pull
-        src: "{{ download_dir }}/"
-        dest: "/{{ restya_install_dir }}/"
-      become: true
-    - name: Setup Postfix
-      shell: echo "postfix postfix/mailname string  {{ domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
-      become: true
-    - name: Setup restya dir Perms
-      file: 
-        path: "{{ item }}" 
-        owner: www-data
-        group: www-data
-        mode: 0775
-        state: directory
-      with_items:
-        - "{{ restya_install_dir }}/media"
-        - "{{ restya_install_dir }}/client/img"
-        - "{{ restya_install_dir }}/tmp/cache"
-      become: true
-    - name: Setup restya shell file perms      
-      file: 
-        path: "{{ restya_install_dir }}/server/php/shell/{{ item }}"
-        mode: 0755
-        state: file  
-      with_items:
-        - card_due_notification.sh
-        - imap.sh
-        - instant_email_notification.sh
-        - periodic_email_notification.sh
-        - webhook.sh
-      become: true
-    - name: setup email notifications in cron
-      cron:
-        backup: yes
-        minute:  "{{ item.minute }}" 
-        job:  "{{ item.job }}"
-      with_items:    
-        - { job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh", minute: "*/5" }
-        - { minute: "*/55", job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh" }
-        - { minute: "*/30", job: "{{ restya_install_dir }}/server/php/shell/imap.sh" }
-        - { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/webhook.sh" }
-        - { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/card_due_notification.sh" }
-    - name: setup php to use smtp
-      lineinfile:
-        path: /etc/php.ini
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }} "
-      with_items:
-        - { regexp: "1021 i auth_username =", line: "1021 i auth_username = {{ smtp_user }}" }
-        - { regexp: "1022 i auth_password =", line: "1022 i auth_password = {{ smtp_pass }}" }
-        - { regexp: "SMTP =", line: "SMTP = {{ smtp_host }}" }
-        - { regexp: "smtp_port =", line: "smtp_port = {{ smtp_port }}" }
-      become: true
-    - name: Restart services
-      command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
-      become: true
-      with_items:
-        - "cron"
-        - "php7.0-fpm"
-        - "postfix"
+--- 
+- name: Include Vars
+  include: "{{ playbook_dir }}/vars/main.yml"
+- name: setup php timezone
+  lineinfile:
+    path: /etc/php/7.0/fpm/php.ini
+    regexp: ";date.timezone"
+    line: "date.timezone = {{ timezone }}"
+    backup: yes
+    create: yes 
+  become: true
+- name: Fix Ubuntu Locale Issue with Postgresql
+  lineinfile: 
+    dest: /etc/default/locale
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - 'LANGUAGE="en_US:en"' 
+    - 'LC_ALL="en_US.UTF-8"'
+  become: true
+  when: ( ansible_distribution == "Debian" or ansible_distribution == "Ubuntu")
+- name: enable geopip phpext
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "extension=geoip.so"
+    line: "extension=geoip.so"
+    backup: yes
+    create: yes  
+- name: Create geoip dir
+  file:
+    path: /usr/share/GeoIP
+    state: directory
+  become: true
+- name: Create restya install dir
+  file:
+    mode: 0775
+    state: directory
+    path: "{{ download_dir }}"
+  become: true
+- name: Move restya to install dir
+  synchronize:
+    mode: pull
+    src: "{{ download_dir }}/"
+    dest: "/{{ restya_install_dir }}/"
+  become: true
+- name: Setup Postfix
+  shell: echo "postfix postfix/mailname string  {{ domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
+  become: true
+- name: Setup restya dir Perms
+  file: 
+    path: "{{ item }}" 
+    owner: www-data
+    group: www-data
+    mode: 0775
+    state: directory
+  with_items:
+    - "{{ restya_install_dir }}/media"
+    - "{{ restya_install_dir }}/client/img"
+    - "{{ restya_install_dir }}/tmp/cache"
+  become: true
+- name: Setup restya shell file perms      
+  file: 
+    path: "{{ restya_install_dir }}/server/php/shell/{{ item }}"
+    mode: 0755
+    state: file  
+  with_items:
+    - card_due_notification.sh
+    - imap.sh
+    - instant_email_notification.sh
+    - periodic_email_notification.sh
+    - webhook.sh
+  become: true
+- name: setup email notifications in cron
+  cron:
+    backup: yes
+    minute:  "{{ item.minute }}" 
+    job:  "{{ item.job }}"
+  with_items:    
+    - { job: "{{ restya_install_dir }}/server/php/shell/instant_email_notification.sh", minute: "*/5" }
+    - { minute: "*/55", job: "{{ restya_install_dir }}/server/php/shell/periodic_email_notification.sh" }
+    - { minute: "*/30", job: "{{ restya_install_dir }}/server/php/shell/imap.sh" }
+    - { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/webhook.sh" }
+    - { minute: "*/5", job: "{{ restya_install_dir }}/server/php/shell/card_due_notification.sh" }
+- name: setup php to use smtp
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }} "
+  with_items:
+    - { regexp: "1021 i auth_username =", line: "1021 i auth_username = {{ smtp_user }}" }
+    - { regexp: "1022 i auth_password =", line: "1022 i auth_password = {{ smtp_pass }}" }
+    - { regexp: "SMTP =", line: "SMTP = {{ smtp_host }}" }
+    - { regexp: "smtp_port =", line: "smtp_port = {{ smtp_port }}" }
+  become: true
+- name: Restart services
+  command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
+  become: true
+  with_items:
+    - "cron"
+    - "php7.0-fpm"
+    - "postfix"
 
