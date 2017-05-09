@@ -7,11 +7,17 @@
     - "nginx"
 - name: Copy restya nginx config to nginx
   copy:
-    src: "{{ download_dir }}/restyaboard.conf"
-    dest: "/etc/nginx/conf.d/restyaboard.conf"
+    src: "defaults/restyaboard.conf"
+    dest: "/etc/nginx/sites-available/restyaboard.conf"
     owner: www-data
     group: www-data
     mode: 0555
+  become: true
+- name: enable nginx site
+  file:
+    src: /etc/nginx/sites-available/restyaboard.com
+    dest: /etc/nginx/sites-enabled/restyaboard
+    state: link
   become: true
 - name: setup nginx config
   replace:
