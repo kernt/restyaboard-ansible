@@ -9,11 +9,11 @@
   restya_install_dir: "/usr/share/nginx/html/restyaboard"
   download_dir: "/opt/restyaboard"
   download_apps_dir: "{{ download_dir }}/client/apps"      
-  postgres_host: "localhost"
-  postgres_port: [] # 5432
-  postgres_user: "postgres"
-  postgres_pass: [] 
-  postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
+  db_host: "localhost"
+  db_port: [] # 5432 for postgres localhost, but use unix local sockets when able
+  db_user: "postgres"
+  db_pass: [] 
+  db_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
   domain: "{{ ansible_fqdn }}"
   smtp_user: []
   smtp_pass: []
@@ -27,7 +27,7 @@
   cert_city: "Seattle"
   cert_state: "Washington"
   web_port: 443
-  provider: "nginx" # apache2 works
-  stage: "stable" #dev or latest works too
-  database: "postgresql" # mariadb or mysql works too
+  provider: "nginx" # apache2 or nginx works
+  stage: "stable" #stable, dev or latest works 
+  database: "postgresql" # postgresql, mariadb or mysql works 
   requirements: false # Set true to skip generic requirements install
