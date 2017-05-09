@@ -262,7 +262,8 @@
     - name: Generate Self Signed Private Key
       openssl_privatekey:
         path: "/etc/nginx/ssl/{{ domain }}.key"
-        size: 4096        
+        size: 4096  
+        force: true
       become: true
       when: (domain == "my.exampledomain.com" or letsencrypt_challenge_name == "sample_com_challenge")
     - name: Generate Self Signed Public Cert
