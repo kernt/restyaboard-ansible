@@ -1,7 +1,6 @@
 ---
 - hosts: all
-  vars_files:
-    - "{{ playbook_dir }}/vars/main.yml"
+  include_vars: "vars/main.yml"
   tasks:
     - name: Run Generic Requirements Install
       include: "{{ playbook_dir }}/tasks/install-requirements.yml"
