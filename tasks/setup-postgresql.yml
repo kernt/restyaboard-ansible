@@ -3,6 +3,12 @@
   tasks:    
     - name: Include Vars
       include: "{{ playbook_dir }}/vars/main.yml"
+    - name: Install Postgresql DB
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - postgresql
     - name: Ensure postgres is running
       command: "service postgresql start"
       become: true
