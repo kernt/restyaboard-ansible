@@ -271,7 +271,7 @@
         send "{{ cert_state }}"
         
         expect "Locality Name (eg, city) []:"
-        send "{{ cert_city {{"
+        send "{{ cert_city }}"
         
         expect "Organization Name (eg, company) [Internet Widgits Pty Ltd]:"
         send "{{ company }}"
