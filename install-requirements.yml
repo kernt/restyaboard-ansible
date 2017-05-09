@@ -1,0 +1,100 @@
+---
+- hosts: all
+  vars:
+    restya_user: "restya"
+    restya_pass: "hjVl2rGd22"  
+    restya_db: "restyaboard"
+    restya_github: "https://github.com/RestyaPlatform/board.git"
+    restya_apps_github: "https://github.com/RestyaPlatform/board-apps.git"
+    restya_install_dir: "/usr/share/nginx/html/restyaboard"
+    download_dir: "/opt/restyaboard"
+    download_apps_dir: "{{ download_dir }}/client/apps"      
+    postgres_host: "localhost"
+    postgres_port: [] # 5432
+    postgres_user: "postgres"
+    postgres_pass: [] 
+    postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
+    domain: "{{ ansible_fqdn }}"
+    smtp_user: []
+    smtp_pass: []
+    smtp_host: []
+    smtp_port: []
+    timezone: "America/Los_Angeles"
+    admin_email: []
+    letsencrypt_challenge_name: "sample_com_challenge"
+    cert_country: "US"
+    company: "Shadey Security Wannabe"
+    cert_city: "Seattle"
+    cert_state: "Washington"
+    nginx_port: 443
+  tasks:    
+    - name: Install standard packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - postgresql
+        - unzip
+        - nginx-full
+        - jq
+        - python-software-properties
+        - libjpeg8
+        - php
+        - postfix
+        - php7.0-fpm
+        - php7.0-cli
+        - libpq5
+        - php7.0-pgsql
+        - php7.0-mbstring
+        - php7.0-ldap
+        - gcc
+        - dos2unix
+        - imagemagick
+        - php7.0-imap
+        - php7.0-xml
+        - wget
+        - ca-certificates
+        - php-geoip
+        - php7.0-dev
+        - libgeoip-dev
+        - geoip-bin
+        - autotools-dev
+        - automake
+        - erlang
+        - libyaml-dev
+        - rebar
+        - curl
+        - debian-keyring 
+        - debian-archive-keyring
+        - libnl-3-200
+        - libnl-3-dev
+        - libnl-genl-3-200
+        - libnl-genl-3-dev
+        - expat
+        - python-pip 
+        - python-dev 
+        - libssl-dev 
+        - build-essential 
+        - libtool 
+        - autoconf
+      become: true
+    - name: Install Pip packages
+      pip:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - ansible
+        - pip
+        - psycopg2
+        - pyOpenSSL
+        - pexpect
+    - name: Grab git projects 
+      git:
+        repo: "{{ restya_github }}"
+        dest: "{{ download_dir }}"
+      become: true
+    - name: Grab restya git apps
+      git:
+        repo: "{{ restya_apps_github }}"
+        dest: "{{ download_apps_dir }}"
+      become: true
