@@ -269,7 +269,7 @@
           'Locality Name \(eg\, city\) \[\]\:' : "{{ cert_city }}"
           'Organization Name \(eg\, company\) \[Internet Widgits Pty Ltd\]\:' : "{{ company }}"
           'Organizational Unit Name \(eg\, section\) \[\]\:' : "\n"
-          'Common Name \(e\.g\. server FQDN or YOUR name\) \[\]\:' : "{{ domain }}"
+          'Common Name \(e\.g\. server FQDN or YOUR name\) \[\]:' : "{{ domain }}\n"
           'Email Address \[\]:' : "{{ admin_email }}"
         echo: yes
       become: true
