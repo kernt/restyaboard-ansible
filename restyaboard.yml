@@ -14,7 +14,7 @@
     postgres_user: "postgres"
     postgres_pass: [] 
     postgres_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
-    domain: "{{ ansible_host }}"
+    domain: "{{ ansible_fqdn }}"
     smtp_user: []
     smtp_pass: []
     smtp_host: []
@@ -270,7 +270,7 @@
           'Organization Name \(eg\, company\) \[Internet Widgits Pty Ltd\]\:' : "{{ company }}"
           'Organizational Unit Name \(eg\, section\) \[\]\:' : "\n"
           'Common Name \(e\.g\. server FQDN or YOUR name\) \[\]:' : "{{ domain }}\n"
-          '.*Email Address \[\]:' : "{{ admin_email }}"
+          '{{ domain }}\r\nEmail Address \[\]:' : "{{ admin_email }}"
         echo: yes
       become: true
       when: letsencrypt_challenge_name == "sample_com_challenge"
