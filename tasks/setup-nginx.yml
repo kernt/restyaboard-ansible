@@ -14,11 +14,10 @@
     mode: 0555
   become: true
 - name: setup nginx config
-  lineinfile:
+  replace:
     path: /etc/nginx/conf.d/restyaboard.conf
     regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    create: yes
+    replace "{{ item.line }}"    
   with_items:
     - { regexp: "root", line: "root  {{ restya_install_dir }};" }  
     - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
