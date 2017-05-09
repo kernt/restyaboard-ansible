@@ -78,7 +78,7 @@
       when: stage == "dev"
     - name: Grab Latest Release
       get_url:
-        "url: https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
+        url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
         dest: "{{ download_dir }}"
         validate_certs: no
       become: true
