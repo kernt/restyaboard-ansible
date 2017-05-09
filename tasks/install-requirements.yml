@@ -62,7 +62,7 @@
   become: true
 - name: setup install dir
   file:
-    path: {{ download_dir }}
+    path: "{{ download_dir }}"
     force: yes
     state: directory
   become: true
