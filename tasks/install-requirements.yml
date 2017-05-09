@@ -1,90 +1,88 @@
 ---
-- hosts: all   
-  tasks: 
-    - name: Install standard packages
-      package:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - apparmor
-        - unzip
-        - jq
-        - python-software-properties
-        - libjpeg8
-        - php
-        - postfix
-        - php7.0-fpm
-        - php7.0-cli
-        - libpq5
-        - php7.0-pgsql
-        - php7.0-mbstring
-        - php7.0-ldap
-        - gcc
-        - dos2unix
-        - imagemagick
-        - php7.0-imap
-        - php7.0-xml
-        - wget
-        - ca-certificates
-        - php-geoip
-        - php7.0-dev
-        - libgeoip-dev
-        - geoip-bin
-        - autotools-dev
-        - automake
-        - erlang
-        - libyaml-dev
-        - rebar
-        - curl
-        - debian-keyring 
-        - debian-archive-keyring
-        - libnl-3-200
-        - libnl-3-dev
-        - libnl-genl-3-200
-        - libnl-genl-3-dev
-        - expat
-        - python-pip 
-        - python-dev 
-        - libssl-dev 
-        - build-essential 
-        - libtool 
-        - autoconf
-        - fail2ban
-      become: true
-    - name: Install Pip packages
-      pip:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - ansible
-        - pip
-        - psycopg2
-        - pyOpenSSL
-        - pexpect
-      become: true
-    - name: Grab git projects 
-      git:
-        repo: "{{ restya_github }}"
-        dest: "{{ download_dir }}"
-      become: true
-      when: stage == "dev"
-    - name: Grab restya git apps
-      git:
-        repo: "{{ restya_apps_github }}"
-        dest: "{{ download_apps_dir }}"
-      become: true
-      when: stage == "dev"
-    - name: Grab Latest Release
-      get_url:
-        url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
-        dest: "{{ download_dir }}"
-        validate_certs: no
-      become: true
-      when: stage == ("stable" or stage == "latest")
-    - name: Unzip Latest Release
-      unarchive:
-        src: "{{ download_dir }}/board-v0.4.2.zip"
-        dest: "{{ download_dir }]"
-      become: true
-      when: stage == ("stable" or stage == "latest")
-        
+tasks: 
+  - name: Install standard packages
+   package:
+    name: "{{ item }}"
+    state: present
+   with_items:
+    - apparmor
+    - unzip
+    - jq
+    - python-software-properties
+    - libjpeg8
+    - php
+    - postfix
+    - php7.0-fpm
+    - php7.0-cli
+    - libpq5
+    - php7.0-pgsql
+    - php7.0-mbstring
+    - php7.0-ldap
+    - gcc
+    - dos2unix
+    - imagemagick
+    - php7.0-imap
+    - php7.0-xml
+    - wget
+    - ca-certificates
+    - php-geoip
+    - php7.0-dev
+    - libgeoip-dev
+    - geoip-bin
+    - autotools-dev
+    - automake
+    - erlang
+    - libyaml-dev
+    - rebar
+    - curl
+    - debian-keyring 
+    - debian-archive-keyring
+    - libnl-3-200
+    - libnl-3-dev
+    - libnl-genl-3-200
+    - libnl-genl-3-dev
+    - expat
+    - python-pip 
+    - python-dev 
+    - libssl-dev 
+    - build-essential 
+    - libtool 
+    - autoconf
+    - fail2ban
+   become: true
+  - name: Install Pip packages
+   pip:
+    name: "{{ item }}"
+    state: latest
+   with_items:
+    - ansible
+    - pip
+    - psycopg2
+    - pyOpenSSL
+    - pexpect
+   become: true
+  - name: Grab git projects 
+   git:
+    repo: "{{ restya_github }}"
+    dest: "{{ download_dir }}"
+   become: true
+   when: stage == "dev"
+  - name: Grab restya git apps
+   git:
+    repo: "{{ restya_apps_github }}"
+    dest: "{{ download_apps_dir }}"
+   become: true
+   when: stage == "dev"
+  - name: Grab Latest Release
+   get_url:
+    url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
+    dest: "{{ download_dir }}"
+    validate_certs: no
+   become: true
+   when: stage == ("stable" or stage == "latest")
+  - name: Unzip Latest Release
+   unarchive:
+    src: "{{ download_dir }}/board-v0.4.2.zip"
+    dest: "{{ download_dir }]"
+   become: true
+   when: stage == ("stable" or stage == "latest")
