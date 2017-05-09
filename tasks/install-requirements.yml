@@ -49,7 +49,7 @@
     - autoconf
     - fail2ban
   become: true
-    - name: Install Pip packages
+- name: Install Pip packages
   pip:
     name: "{{ item }}"
     state: latest
@@ -60,26 +60,26 @@
     - pyOpenSSL
     - pexpect
   become: true
-    - name: Grab git projects 
+- name: Grab git projects 
   git:
     repo: "{{ restya_github }}"
     dest: "{{ download_dir }}"
   become: true
   when: stage == "dev"
-    - name: Grab restya git apps
+- name: Grab restya git apps
   git:
     repo: "{{ restya_apps_github }}"
     dest: "{{ download_apps_dir }}"
   become: true
   when: stage == "dev"
-    - name: Grab Latest Release
+- name: Grab Latest Release
   get_url:
     url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
     dest: "{{ download_dir }}"
     validate_certs: no
   become: true
   when: stage == ("stable" or stage == "latest")
-    - name: Unzip Latest Release
+- name: Unzip Latest Release
   unarchive:
     src: "{{ download_dir }}/board-v0.4.2.zip"
     dest: "{{ download_dir }]"
