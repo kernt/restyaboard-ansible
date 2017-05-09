@@ -1,6 +1,8 @@
 ---
 - hosts: all   
-  tasks:    
+  tasks: 
+    - name: Include Vars
+      include: "{{ playbook_dir }}/vars/main.yml"
     - name: Install standard packages
       package:
         name: "{{ item }}"
