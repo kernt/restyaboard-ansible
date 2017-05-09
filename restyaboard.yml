@@ -21,7 +21,7 @@
     smtp_port: []
     timezone: "America/Los_Angeles"
     admin_email: []
-    letencrypt_challenge_name: "sample_com_challenge"
+    letsencrypt_challenge_name: "sample_com_challenge"
     cert_country: "US"
     company: "Shadey Security Wannabe"
     cert_city: "Seattle"
