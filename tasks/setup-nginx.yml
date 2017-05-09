@@ -3,6 +3,12 @@
   tasks:    
     - name: Include Vars
       include: "{{ playbook_dir }}/vars/main.yml"    
+    - name: Install NGINX Packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - nginx_full
     - name: setup nginx 
       lineinfile:
         path: /etc/nginx/conf.d/restyaboard.conf
