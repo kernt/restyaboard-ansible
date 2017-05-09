@@ -1,6 +1,4 @@
 --- 
-- name: Include Vars
-  include: "{{ playbook_dir }}/vars/main.yml"
 - name: setup php timezone
   lineinfile:
     path: /etc/php/7.0/fpm/php.ini
