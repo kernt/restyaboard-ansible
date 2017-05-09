@@ -274,7 +274,7 @@
       when: (domain == "my.exampledomain.com" or letsencrypt_challenge_name == "sample_com_challenge")
     - name: Copy Nginx Config Over
       copy:
-        src: "{{ ansible_dir }}/defaults/nginx.conf"
+        src: "{{ playbook_dir }}/defaults/nginx.conf"
         dest: "/etc/nginx/nginx.conf"
         force: yes
         backup: yes    
