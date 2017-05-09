@@ -87,6 +87,7 @@
         - pip
         - psycopg2
         - pyOpenSSL
+        - pexpect
     - name: Grab git projects 
       git:
         repo: "{{ restya_github }}"
