@@ -1,34 +1,32 @@
 ---
 # vars file for restyaboard_ansible
-- hosts: all
-  vars:
-    restya_user: "restya"
-    restya_pass: "hjVl2rGd22"  
-    restya_db: "restyaboard"
-    restya_github: "https://github.com/RestyaPlatform/board.git"
-    restya_apps_github: "https://github.com/RestyaPlatform/board-apps.git"
-    restya_install_dir: "/var/www/restyaboard"
-    download_dir: "/opt/restyaboard"
-    download_apps_dir: "{{ download_dir }}/client/apps"      
-    db_host: "localhost"
-    db_port: [] # 5432 for postgres localhost, but use unix local sockets when able
-    db_user: "postgres"
-    db_pass: [] 
-    db_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
-    domain: "{{ ansible_fqdn }}"
-    smtp_user: []
-    smtp_pass: []
-    smtp_host: []
-    smtp_port: []
-    timezone: "America/Los_Angeles"
-    admin_email: []
-    letsencrypt_challenge_name: "sample_com_challenge"
-    cert_country: "US"
-    company: "Shadey Security Wannabe"
-    cert_city: "Seattle"
-    cert_state: "Washington"
-    web_port: 443
-    provider: "nginx" # apache2 or nginx works
-    stage: "stable" #stable, dev or latest works 
-    database: "postgresql" # postgresql, mariadb or mysql works 
-    requirements: false # Set true to skip generic requirements install
+restya_user: "restya"ss
+restya_pass: "hjVl2rGd22"sss
+restya_db: "restyaboard"ss
+restya_github: "https://github.com/RestyaPlatform/board.git"ss
+restya_apps_github: "https://github.com/RestyaPlatform/board-apps.git"ss
+restya_install_dir: "/var/www/restyaboard"ss
+download_dir: "/opt/restyaboard"ss
+download_apps_dir: "{{ download_dir }}/client/apps"    sss
+db_host: "localhost"ss
+db_port: [] # 5432 for postgres localhost, but use unix local sockets when abless
+db_user: "postgres"ss
+db_pass: []sss
+db_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...ss
+domain: "{{ ansible_fqdn }}"ss
+smtp_user: []ss
+smtp_pass: []ss
+smtp_host: []ss
+smtp_port: []ss
+timezone: "America/Los_Angeles"ss
+admin_email: []ss
+letsencrypt_challenge_name: "sample_com_challenge"ss
+cert_country: "US"ss
+company: "Shadey Security Wannabe"ss
+cert_city: "Seattle"ss
+cert_state: "Washington"ss
+web_port: 443ss
+provider: "nginx" # apache2 or nginx worksss
+stage: "stable" #stable, dev or latest workssss
+database: "postgresql" # postgresql, mariadb or mysql workssss
+requirements: false # Set true to skip generic requirements install
