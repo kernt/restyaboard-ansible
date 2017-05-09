@@ -245,6 +245,12 @@
         - { regexp: "SMTP =", line: "SMTP = {{ smtp_host }}" }
         - { regexp: "smtp_port =", line: "smtp_port = {{ smtp_port }}" }
       become: true
+    - name: Create NGINX SSL Directory
+      file:
+        path: /etc/nginx/ssl
+        state: directory
+        mode: 755
+      become: true
     - name: Enable Let's Encrypt
       letsencrypt:
         account_key: "/etc/pki/cert/private/account.key"
