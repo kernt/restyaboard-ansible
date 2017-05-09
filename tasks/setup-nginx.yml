@@ -20,7 +20,7 @@
     replace: "{{ item.line }}" 
     backup: yes
   with_items:
-    - { regexp: "root", line: "root  {{ restya_install_dir }};" }  
+    - { regexp: ".*root.*", line: "root  {{ restya_install_dir }};" }  
     - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
     - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
     - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
