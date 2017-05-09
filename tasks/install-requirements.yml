@@ -82,6 +82,6 @@
 - name: Unzip Latest Release
   unarchive:
     src: "{{ download_dir }}/board-v0.4.2.zip"
-    dest: "{{ download_dir }]"
+    dest: "{{ download_dir }}"
   become: true
   when: stage == ("stable" or stage == "latest")
