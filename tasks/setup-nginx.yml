@@ -53,7 +53,8 @@
         src: "{{ playbook_dir }}/defaults/nginx.conf"
         dest: "/etc/nginx/nginx.conf"
         force: yes
-        backup: yes    
+        backup: yes  
+      when: ( stage == "dev" or stage == "latest" )
     - name: Setup Nginx Conf File to Use cert and domain
       lineinfile:
         path: "/etc/nginx/nginx.conf"
