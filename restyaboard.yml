@@ -248,7 +248,7 @@
       file:
         path: /etc/nginx/ssl
         state: directory
-        mode: 755
+        mode: 0755
       become: true
     - name: Enable Let's Encrypt
       letsencrypt:
@@ -291,7 +291,7 @@
     - name: ensure permissions for nginx
       file:
         path: "{{ item }}"
-        mode: 500
+        mode: 0500
         owner: www-data
         group: www-data
         state: file
