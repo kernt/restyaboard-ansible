@@ -11,6 +11,7 @@ else
   sudo pip install ansible
   sudo mkdir -p /etc/ansible
   sudo cp -f ./defaults/hosts /etc/ansible/hosts 
+  sudo ansible-playbook install-requirements.yml -c local
   sudo ansible-playbook restyaboard.yml -c local 
 fi
 
