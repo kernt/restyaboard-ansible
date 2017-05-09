@@ -256,7 +256,7 @@
         account_key: "/etc/pki/cert/private/account.key"
         csr: "/etc/pki/cert/csr/{{ domain }}.csr"
         dest: "/etc/httpd/ssl/{{ domain }}.crt"
-      when: (domain != "my.exampledomain.com" and letsencrypt_challenge_name != "sample_com_challenge")
+      when: letsencrypt_challenge_name != "sample_com_challenge"
       become: true
       register: "{{ letsencrypt_challenge_name }}"
     - name: Generate Self Signed Private Key
@@ -265,14 +265,14 @@
         size: 4096  
         force: true
       become: true
-      when: (domain == "my.exampledomain.com" or letsencrypt_challenge_name == "sample_com_challenge")
+      when: letsencrypt_challenge_name == "sample_com_challenge"
     - name: Generate Self Signed Public Cert
       openssl_publickey:
         privatekey_path: "/etc/nginx/ssl/{{ domain }}.key"
         path: "/etc/nginx/ssl/{{ domain }}.crt"
         force: true
       become: true
-      when: (domain == "my.exampledomain.com" or letsencrypt_challenge_name == "sample_com_challenge")
+      when: letsencrypt_challenge_name == "sample_com_challenge"
     - name: Copy Nginx Config Over
       copy:
         src: "{{ playbook_dir }}/defaults/nginx.conf"
