@@ -29,3 +29,5 @@
   web_port: 443
   provider: "nginx" # apache2 works
   stage: "stable" #dev or latest works too
+  database: "postgresql" # mariadb or mysql works too
+  requirements: false # Set true to skip generic requirements install
