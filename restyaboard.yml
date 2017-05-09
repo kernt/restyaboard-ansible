@@ -270,7 +270,7 @@
           'Organization Name \(eg\, company\) \[Internet Widgits Pty Ltd\]\:' : "{{ company }}"
           'Organizational Unit Name \(eg\, section\) \[\]\:' : "\n"
           'Common Name \(e\.g\. server FQDN or YOUR name\) \[\]:' : "{{ domain }}\n"
-          'Email Address \[\]:' : "{{ admin_email }}"
+          '.*Email Address \[\]:' : "{{ admin_email }}"
         echo: yes
       become: true
       when: letsencrypt_challenge_name == "sample_com_challenge"
