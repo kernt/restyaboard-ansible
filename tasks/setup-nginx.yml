@@ -15,7 +15,7 @@
   become: true
 - name: enable nginx site
   file:
-    src: /etc/nginx/sites-available/restyaboard.com
+    src: /etc/nginx/sites-available/restyaboard.conf
     dest: /etc/nginx/sites-enabled/restyaboard
     state: link
   become: true
