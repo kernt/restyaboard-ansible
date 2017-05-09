@@ -78,7 +78,7 @@
         - libtool 
         - autoconf
       become: true
-    - name: ensure latest version of ansible pip psycopg2
+    - name: Install Pip packages
       pip:
         name: "{{ item }}"
         state: latest
