@@ -284,10 +284,10 @@
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
       with_items:
-        - { regexp: "server_name" , line: "server_name   {{ domain }} ;" }
-        - { regexp: "ssl_certificate" , line: "ssl_certificate   {{ domain }}.crt ;" }
-        - { regexp: "ssl_certificate_key" , line: "ssl_certificate_key   {{ domain }}.key;" }
-        - { regexp: "listen" , line: "listen    {{ nginx_port }} ssl;" }
+        - { regexp: ".*server_name.*$" , line: "server_name   {{ domain }} ;" }
+        - { regexp: ".*ssl_certificate.*$" , line: "ssl_certificate   {{ domain }}.crt ;" }
+        - { regexp: ".*ssl_certificate_key.*$" , line: "ssl_certificate_key   {{ domain }}.key;" }
+        - { regexp: ".*listen.*$" , line: "listen    {{ nginx_port }} ssl;" }
       become: true
     - name: Restart services
       command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
