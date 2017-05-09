@@ -1,5 +1,7 @@
 ---
 - hosts: all  
+  vars_files:
+    - "{{ playbook_dir }}/vars/main.yml"
   tasks:    
     - name: Include Vars
       include: "{{ playbook_dir }}/vars/main.yml"
