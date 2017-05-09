@@ -264,13 +264,13 @@
       expect: 
         command: "openssl req -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
         responses:
-          'Country Name \(2 letter code\) \[AU\]:': "{{ cert_country }}"
-          'State or Province Name \(full name\) \[Some-State\]:': "{{ cert_state }}"
-          'Locality Name \(eg\, city\) \[\]\:': "{{ cert_city }}"
-          'Organization Name \(eg\, company\) \[Internet Widgits Pty Ltd\]\:': "{{ company }}"
-          'Organizational Unit Name \(eg\, section\) \[\]\:': "\n"
-          'Common Name \(e\.g\. server FQDN or YOUR name\) \[\]\:': "{{ domain }}"
-          'Email Address \[\]\:': "{{ admin_email }}"
+          'Country Name \(2 letter code\) \[AU\]:' : "{{ cert_country }}"
+          'State or Province Name \(full name\) \[Some-State\]:' : "{{ cert_state }}"
+          'Locality Name \(eg\, city\) \[\]\:' : "{{ cert_city }}"
+          'Organization Name \(eg\, company\) \[Internet Widgits Pty Ltd\]\:' : "{{ company }}"
+          'Organizational Unit Name \(eg\, section\) \[\]\:' : "\n"
+          'Common Name \(e\.g\. server FQDN or YOUR name\) \[\]\:' : "{{ domain }}"
+          'Email Address \[\]\:' : "{{ admin_email }}"
         echo: no
       become: true
       when: letsencrypt_challenge_name == "sample_com_challenge"
