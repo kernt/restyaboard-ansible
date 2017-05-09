@@ -53,10 +53,10 @@
         create: yes
       with_items:
         - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_NAME'.*$", line: "define('R_DB_NAME', '{{ restya_db }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ postgres_user }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ postgres_pass }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ postgres_host }}');" }
-        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ postgres_port }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_USER'.*$", line: "define('R_DB_USER', '{{ db_user }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PASSWORD'.*$", line: "define('R_DB_PASSWORD', '{{ db_pass }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_HOST'.*$", line: "define('R_DB_HOST', '{{ db_host }}');" }
+        - { path: "{{ restya_install_dir }}/server/php/config.inc.php", reg: "^.*'R_DB_PORT'.*$", line: "define('R_DB_PORT', '{{ db_port }}');" }
       become: yes
     - name: Restart services
       command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
