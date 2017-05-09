@@ -6,7 +6,7 @@
   restya_db: "restyaboard"
   restya_github: "https://github.com/RestyaPlatform/board.git"
   restya_apps_github: "https://github.com/RestyaPlatform/board-apps.git"
-  restya_install_dir: "/usr/share/nginx/html/restyaboard"
+  restya_install_dir: "/var/www/restyaboard"
   download_dir: "/opt/restyaboard"
   download_apps_dir: "{{ download_dir }}/client/apps"      
   db_host: "localhost"
