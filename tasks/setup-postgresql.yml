@@ -46,7 +46,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: "local.*{{ restya_db }}.*{{ restya_user }}.*", line: "local   {{ restya_db }}      {{ restya_user }}       all         trust"}
+    - { regexp: "local.*{{ restya_db }}.*{{ restya_user }}.*", line: "local   {{ restya_db }}      {{ restya_user }}          trust"}
     - { regexp: "host.*{{ restya_db }}.*{{ restya_user }}.*127.*", line: "host    {{ restya_db }}     {{ restya_user }}       127.0.0.1/8        trust"}
   become: true
 - name: Setup PHP 
