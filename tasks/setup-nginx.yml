@@ -5,6 +5,12 @@
     state: present
   with_items:
     - "nginx"
+- name: Copy our nginx.conf over
+  copy:
+    src: "defaults/nginx.conf"
+    dest: "/etc/nginx/nginx.conf"
+    force: yes
+  become: true
 - name: Copy restya nginx config to nginx
   copy:
     src: "defaults/restyaboard.conf"
@@ -12,7 +18,7 @@
     owner: www-data
     group: www-data
     mode: 0555
-  become: true
+  become: true  
 - name: enable nginx site
   file:
     src: "{{ webserver_conf }}"
