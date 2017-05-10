@@ -40,6 +40,15 @@
   command: "psql -d  {{ restya_db }} -f  {{ download_dir }}/sql/restyaboard_with_empty_data.sql" 
   become: true
   become_user: postgres
+- name: Setup Restya user Access
+  lineinfile:
+    path: "{{ db_conf }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "local.*restya.*restya.*", line: "local   restya     restya       all         trust"}
+    - { regexp: "host.*restya.*restya.*127.*", line: "host    resta     restya       127.0.0.1/8        trust"}
+  become: true
 - name: Setup PHP 
   lineinfile:
     path: "{{ item.path }}"
