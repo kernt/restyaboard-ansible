@@ -10,6 +10,7 @@ Latest version of ansible. This was only tested on Ubuntu 16.04 LTS, should work
 
 Role Variables
 --------------
+These can be found in vars/main.yml:
 ```
 <variable> : <default> # <Purpose>
 restya_user: "restya"  # database user used by restya
