@@ -39,7 +39,14 @@
   synchronize:
     mode: pull
     src: "{{ download_dir }}/"
-    dest: "/{{ restya_install_dir }}/"
+    dest: "{{ restya_install_dir }}"
+  become: true
+- name: Ensure Ownership of Install Dir
+  file:
+    path: "{{ restya_install_dir }}"
+    owner: www-data
+    group: www-data
+    recurse: yes
   become: true
 - name: Setup Postfix
   shell: echo "postfix postfix/mailname string  {{ domain }}" | debconf-set-selections && echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
