@@ -10,7 +10,7 @@ Latest version of ansible. This was only tested on Ubuntu 16.04 LTS, should work
 
 Role Variables
 --------------
-'''
+```
 <variable> : <default> # <Purpose>
 restya_user: "restya"  # database user used by restya
 restya_pass: "hjVl2rGd22" # database user password used by restya
@@ -43,12 +43,11 @@ stage: "stable" #stable, dev or latest work
 database: "postgresql" # postgresql, mariadb or mysql work
 requirements: false # Set true to skip generic requirements install
 stable_url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip" 
-'''    
+``` 
 
 Dependencies
 ------------
 The project relies on these dependencies:
-'''
    - apparmor
     - unzip
     - jq
@@ -103,7 +102,6 @@ The project relies on these dependencies:
     - webserver (apache+mods or nginx)
     - SQL server (postgres+exts or soon mariadb)
 
-'''
 License
 -------
 
