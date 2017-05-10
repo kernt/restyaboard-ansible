@@ -29,6 +29,8 @@
     - php7.0-dev
     - libgeoip-dev
     - geoip-bin
+    - geoip-database-extra 
+    - geoip-database 
     - autotools-dev
     - automake
     - erlang
