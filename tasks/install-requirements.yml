@@ -17,6 +17,7 @@
     - php7.0-pgsql
     - php7.0-mbstring
     - php7.0-ldap
+    - php7.0-curl
     - gcc
     - dos2unix
     - imagemagick
