@@ -30,3 +30,4 @@ stage: "stable" #stable, dev or latest work
 database: "postgresql" # postgresql, mariadb or mysql work
 requirements: false # Set true to skip generic requirements install
 stable_url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip" 
+webserver_conf: "/etc/nginx/sites-available/restyaboard.conf" # Where we want the nginx config to go
