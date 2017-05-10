@@ -98,6 +98,29 @@
     - { regexp: "smtp_port =", line: "smtp_port = {{ smtp_port }}" }
   become: true
   when: smtp_host != ""
+- name: Enable PHP-FPM Logging
+  lineinfile:
+    path: "/etc/php/7.0/fpm/pool.d/www.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - { regexp: "catch_workers_output = yes", line: "catch_workers_output = yes" }
+    - { regexp: "php_flag[display_errors] = on", line: "php_flag[display_errors] = on" }
+    - { regexp: "php_admin_value[error_log] = /var/log/fpm/error.log", line: "php_admin_value[error_log] = /var/log/fpm/error.log" }
+    - { regexp: "php_admin_flag[log_errors] = on", line: "php_admin_flag[log_errors] = on" }  
+  become: true
+- name: touch fpm log file
+  lineinfile:
+    create: yes
+    path: "/var/log/fpm/error.log"
+    owner: www-data
+    group: www-data
+    mode: 0777
+    state: present
+    line: "Install Complete"
+    regexp: "Install Complete"
+  become: true
 - name: Restart services
   command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
   become: true
