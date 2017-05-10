@@ -8,20 +8,20 @@
 - name: Copy restya nginx config to nginx
   copy:
     src: "defaults/restyaboard.conf"
-    dest: "/etc/nginx/sites-available/restyaboard.conf"
+    dest: "{{ webserver_conf }}"
     owner: www-data
     group: www-data
     mode: 0555
   become: true
 - name: enable nginx site
   file:
-    src: /etc/nginx/sites-available/restyaboard.conf
+    src: "{{ webserver_conf }}"
     dest: /etc/nginx/sites-enabled/restyaboard
     state: link
   become: true
 - name: setup nginx config
   replace:
-    path: /etc/nginx/conf.d/restyaboard.conf
+    path: "{{ webserver_conf }}"
     regexp: "{{ item.regexp }}"
     replace: "{{ item.line }}" 
     backup: yes
