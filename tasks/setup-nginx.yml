@@ -38,7 +38,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}" 
   with_items:
-    - { regexp: ".*daroot.*", line: "root  {{ restya_install_dir }}/;" }  
+    - { regexp: ".*danger.*", line: "root  {{ restya_install_dir }}/;" }  
   become: true
 - name: Create NGINX SSL Directory
   file:
