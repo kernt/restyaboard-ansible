@@ -97,6 +97,7 @@
     - { regexp: "SMTP =", line: "SMTP = {{ smtp_host }}" }
     - { regexp: "smtp_port =", line: "smtp_port = {{ smtp_port }}" }
   become: true
+  when: smtp_host != ""
 - name: Restart services
   command: "service {{ item }} restart" # due to a bug with ansible and systemd, using this
   become: true
