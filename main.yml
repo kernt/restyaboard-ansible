@@ -12,11 +12,12 @@
 #    - name: Run Setup MariaDB # Not currently supported :(
 #      when: ( database == "mysql" or database == "mariadb" )
 #      include "{{ playbook_dir }}/tasks/setup-mariadb.yml"
+    - name: Run Generic App Setup
+      include: "{{ playbook_dir }}/tasks/setup-generic.yml"
     - name: Run Setup Apache2 
       include: "{{ playbook_dir }}/tasks/setup-apache2.yml"
       when: (provider == "apache2" or provider == "httpd" )
     - name: Run Setup NGINX
       when: provider == "nginx"
       include: "{{ playbook_dir }}/tasks/setup-nginx.yml"
-    - name: Run Generic App Setup
-      include: "{{ playbook_dir }}/tasks/setup-generic.yml"
+
