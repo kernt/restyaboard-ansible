@@ -8,17 +8,17 @@ restya_install_dir: "/var/www/restyaboard"
 download_dir: "/opt/restyaboard"
 download_apps_dir: "{{ download_dir }}/client/apps"    
 db_host: "localhost"
-db_port: [] # 5432 for postgres localhost, but use unix local sockets when able
+db_port: 5432 # 5432 for postgres localhost, but use unix local sockets when able
 db_user: "postgres"
-db_pass: []
+db_pass: ""
 db_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
 domain: "{{ ansible_fqdn }}"
-smtp_user: []
-smtp_pass: []
-smtp_host: []
-smtp_port: []
+smtp_user: 
+smtp_pass: 
+smtp_host: 
+smtp_port: 
 timezone: "America/Los_Angeles"
-admin_email: []
+admin_email: 
 letsencrypt_challenge_name: "sample_com_challenge"
 cert_country: "US"
 company: "Shadey Security Wannabe"
