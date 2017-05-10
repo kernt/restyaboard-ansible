@@ -18,7 +18,7 @@ smtp_pass:
 smtp_host: 
 smtp_port: 
 timezone: "America/Los_Angeles"
-admin_email: 
+admin_email: "admin@example.org"
 letsencrypt_challenge_name: "sample_com_challenge"
 cert_country: "US"
 company: "Shadey Security Wannabe"
