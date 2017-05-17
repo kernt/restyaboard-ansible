@@ -6,17 +6,19 @@ restya_github: "https://github.com/RestyaPlatform/board.git"
 restya_apps_github: "https://github.com/RestyaPlatform/board-apps.git"
 restya_install_dir: "/var/www/restyaboard"
 download_dir: "/opt/restyaboard"
-download_apps_dir: "{{ download_dir }}/client/apps"    
+download_apps_dir: "{{ download_dir }}/client/apps"
+web_conf: "{{ playbook_dir }}/default/nginx.conf"
+restya_web_conf: "{{ download_dir }}/restyaboard.conf"
 db_host: "localhost"
 db_port: 5432 # 5432 for postgres localhost, but use unix local sockets when able
 db_user: "postgres"
 db_pass: ""
 db_conf: "/etc/postgresql/9.5/main/pg_hba.conf" # This varies host to host and postgres version to version...
 domain: "{{ ansible_fqdn }}"
-smtp_user: 
-smtp_pass: 
-smtp_host: 
-smtp_port: 
+smtp_user:
+smtp_pass:
+smtp_host:
+smtp_port:
 timezone: "America/Los_Angeles"
 admin_email: "admin@example.org"
 letsencrypt_challenge_name: "sample_com_challenge"
@@ -29,5 +31,5 @@ provider: "nginx" # apache2 or nginx work
 stage: "stable" #stable, dev or latest work
 database: "postgresql" # postgresql, mariadb or mysql work
 requirements: false # Set true to skip generic requirements install
-stable_url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip" 
+stable_url: "https://github.com/RestyaPlatform/board/releases/download/v0.4.2/board-v0.4.2.zip"
 webserver_conf: "/etc/nginx/sites-available/restyaboard.conf" # Where we want the nginx config to go
