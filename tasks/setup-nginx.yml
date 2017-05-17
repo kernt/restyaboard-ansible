@@ -7,18 +7,18 @@
     - "nginx"
 #- name: Copy our nginx.conf over
 #  copy:
-#    src: "defaults/nginx.conf"
+#    src: "{{ web_conf }}"
 #    dest: "/etc/nginx/nginx.conf"
 #    force: yes
 #  become: true
-- name: Copy restya nginx config to nginx sub-dir
+- name: Copy restya nginx config to nginx
   copy:
-    src: "defaults/restyaboard.conf"
+    src: "{{ restya_web_conf }}"
     dest: "{{ webserver_conf }}"
     owner: www-data
     group: www-data
     mode: 0555
-  become: true  
+  become: true
 - name: enable nginx site
   file:
     src: "{{ webserver_conf }}"
@@ -29,10 +29,10 @@
   replace:
     path: "{{ webserver_conf }}"
     regexp: "{{ item.regexp }}"
-    replace: "{{ item.line }}" 
+    replace: "{{ item.line }}"
     backup: yes
   with_items:
-    - { regexp: ".*root.*", line: "root  {{ restya_install_dir }}/client;" }  
+    - { regexp: ".*root.*", line: "root  {{ restya_install_dir }}/client;" }
     - { regexp: ".*server_name .*" , line: "server_name   {{ domain }} ;" }
     - { regexp: ".*listen .*" , line: "listen    {{ web_port }} ssl;" }
     - { regexp: ".*ssl_certificate .*" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
@@ -42,9 +42,9 @@
   lineinfile:
     path: "{{ webserver_conf }}"
     regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}" 
+    line: "{{ item.line }}"
   with_items:
-    - { regexp: ".*danger.*", line: "root  {{ restya_install_dir }};" }  
+    - { regexp: ".*danger.*", line: "root  {{ restya_install_dir }};" }
   become: true
 - name: Create NGINX SSL Directory
   file:
@@ -72,7 +72,7 @@
     - { regexp: "L =", line: "L = {{ cert_city }}" }
     - { regexp: "O =", line: "O = {{ company }}" }
     - { regexp: "emailAddress", line: " emailAddress = {{ admin_email }}" }
-  become: true        
+  become: true
 - name: Create Self Signed Certificates
   command: "openssl req  -config {{ playbook_dir}}/defaults/ssl-request.conf -sha512 -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/nginx/ssl/{{ domain }}.key -out /etc/nginx/ssl/{{ domain }}.crt"
   become: true
@@ -100,5 +100,3 @@
   become: true
   with_items:
     - "nginx"
-
-
