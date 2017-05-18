@@ -58,13 +58,13 @@
     backup: yes    
 - name: Setup Nginx Conf File to Use cert and domain # TODO REVIEW THIS
   lineinfile:
-    path: "/etc/nginx/nginx.conf"
+    path: "/etc/apache2/sites-available/{{ restya_web_conf }}"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - { regexp: ".*server_name .*$" , line: "server_name   {{ domain }} ;" }
-    - { regexp: ".*ssl_certificate .*$" , line: "ssl_certificate   /etc/nginx/ssl/{{ domain }}.crt ;" }
-    - { regexp: ".*ssl_certificate_key .*$" , line: "ssl_certificate_key   /etc/nginx/ssl/{{ domain }}.key;" }
+    - { regexp: ".*ServerName .*$" , line: "ServerName   {{ domain }} ;" }
+    - { regexp: ".*SSLCertificateFile .*$" , line: "SSLCertificateFile  /etc/apache2/ssl/{{ domain }}.crt ;" }
+    - { regexp: ".*SSLCertificateKeyFile .*$" , line: "SSLCertificateKeyFile   /etc/apache2/ssl/{{ domain }}.key;" }
     - { regexp: ".*listen .*$" , line: "listen    {{ web_port }} ssl;" }
   become: true
 - name: Ensure certs are in unix format
