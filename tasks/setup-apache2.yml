@@ -15,9 +15,7 @@
     name: "{{ item }}"
   with_items:
     - security2
-    - evasive
     - rewrite
-    - ruwsgi 
     - apparmor
     - ssl
   become: true    
