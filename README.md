@@ -1,3 +1,16 @@
+Sources: 
+* [Run with Docker](https://hub.docker.com/r/restyaplatform/restyaboard/)
+* [Installl Script](https://github.com/RestyaPlatform/board/raw/master/restyaboard.sh)
+
+You may use wget for downloading: `wget https://github.com/RestyaPlatform/board/raw/master/restyaboard.sh --no-check-certificate`
+
+Then
+    > In restyaboard.sh, update PostgreSQL configurations as you wanted. For intranet or medium security setup, you may leave it as it is. If you edit, you must remember the details.
+    Execute chmod +x restyaboard.sh
+    Execute restyaboard.sh
+
+If you face any issue, please open a ticket in GitHub and upload the created restyaboard_install.log log file. This will help us to track the issue.
+
 restyaboard-ansible
 =========
 
